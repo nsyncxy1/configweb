@@ -28,7 +28,7 @@ const constantRoutes = [
     },
     {
       path: '/',
-      redirect:'/login'
+      redirect:'/dash'
     },
     {
         path: '/dash',
