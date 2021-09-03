@@ -1,0 +1,23 @@
+.notFound-wraper{
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #115c7f;
+  .notFount-box{
+    width: 20rem;
+    height: 20rem;
+    color:#fff;
+    text-align: center;
+    .notFount-title{
+      font-size: 12rem;
+      line-height: 13rem;
+    }
+    .notFount-des{
+      font-size: 1rem;
+    }
+  }
+}

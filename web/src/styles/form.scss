@@ -1,0 +1,62 @@
+.wraper{
+  .ruleForm{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: left;
+  }
+  .form{
+    text-align: left;
+    .user-check{
+      .el-checkbox-group{
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        flex-wrap: wrap;
+        min-height: 40px;
+      }
+    }
+  }
+  .config-form{
+    .form-input{
+      width: 223px;
+    }
+  }
+  .data-page{
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    text-align: right;
+  }
+  .dialog-form{
+    text-align: left;
+    .btn{
+      text-align: right;
+    }
+  }
+  .el-dialog__header{
+    text-align: left;
+  }
+  .el-form-item .el-form-item {
+    margin-bottom: 22px;
+  }
+  /*.el-tree{
+    display: flex;
+    flex-wrap: wrap;
+    >.el-tree-node{
+      margin-right: 3rem;
+      margin-bottom: 2rem;
+    }
+  }*/
+}
+body .el-table th.gutter {
+  display: table-cell !important
+}
+.form-input{
+  width: 200px;
+}
+.dialog-modify{
+  text-align: center;
+  .el-dialog__header{
+    text-align: left;
+  }
+}

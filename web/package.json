@@ -1,0 +1,59 @@
+{
+  "name": "dk_admin",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@form-create/element-ui": "^2.5.0-alpha.5",
+    "axios": "^0.21.1",
+    "codemirror": "^5.45.0",
+    "core-js": "^3.6.5",
+    "js-cookie": "^2.2.1",
+    "jshint": "^2.11.1",
+    "jsonlint": "^1.6.3",
+    "normalize.css": "^8.0.1",
+    "nprogress": "^0.2.0",
+    "script-loader": "^0.7.2",
+    "vue": "^2.6.11",
+    "vue-codemirror": "^4.0.6",
+    "vue-router": "^3.5.1",
+    "vuex": "^3.6.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "babel-eslint": "^10.1.0",
+    "element-ui": "^2.15.1",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "mockjs": "^1.1.0",
+    "node-sass": "^5.0.0",
+    "sass-loader": "^7.0.0",
+    "terser-webpack-plugin": "^5.1.1",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

@@ -1,0 +1,43 @@
+.login-wraper{
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  position: relative;
+  // background-color: #409eff;
+  //background-image: url("/src/assets/images/information.jpg");
+  //background-repeat: no-repeat;
+  //background-position: center center;
+}
+.login-box{
+  width: 25rem;
+  height: 20rem;
+  position: absolute;
+  left: 50%;
+  top:50%;
+  transform: translateX(-50%) translateY(-50%);
+  border: .06rem solid #409eff;
+  border-radius: .5rem;
+  .login-title{
+    color:#27bffe;
+    font-weight: bold;
+    font-size: 2rem;
+    text-align: center;
+    height: 5rem;
+    line-height: 5rem;
+  }
+  .login-form{
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 1.5rem;
+    .login-input .el-input__inner{
+      //color:#fff;
+      //border:none;
+      //background-color: #01131D;
+    }
+    .login-submit{
+      width: 100%;
+      margin-top: 1.5rem;
+    }
+  }
+}
