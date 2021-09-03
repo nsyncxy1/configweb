@@ -1,0 +1,22 @@
+.document-wraper{
+  .document-form-inline{
+    display: flex;
+    justify-content: flex-start;
+  }
+  .pagination{
+    margin-top: 20px;
+  }
+  .CodeMirror {
+    text-align: left;
+    width: 400px;
+    line-height: 30px;
+  }
+}
+.doc-config-wraper{
+  .footer{
+    text-align: right;
+  }
+  .CodeMirror {
+    text-align: left;
+  }
+}

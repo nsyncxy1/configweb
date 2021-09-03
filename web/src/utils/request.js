@@ -2,9 +2,6 @@ import axios from "axios"
 import {Message} from "element-ui";
 const request = axios.create({
     baseURL:process.env["VUE_APP_BASE_API"],
-    //baseURL:process.env.NODE_PATH === 'production' ? 'http://41.204.2.93:8021': '/api',
-    //baseURL:'http://127.0.0.1:8021',
-    //baseURL:'http://41.204.2.93:8021',
     timeout:100000,
 })
 request.interceptors.request.use(function (config) {
@@ -23,7 +20,7 @@ request.interceptors.response.use( (response) => {
         })
         return Promise.reject('error')
     }
-    return response
+    return res
 },function (error) {
     //console.error(error)
     return Promise.reject(error)

@@ -1,34 +1,6 @@
 <template>
-    <div class="app-container">
-        <!--<el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="任务名" prop="taskName">
-            <el-input
-              v-model="queryParams.taskName"
-              placeholder="请输入任务名"
-              clearable
-              size="small"
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-          </el-form-item>
-        </el-form>-->
-        <!--<el-row :gutter="10" class="mb8">
-            <el-col :span="1.5">
-                <el-button
-                        type="primary"
-                        plain
-                        icon="el-icon-plus"
-                        size="mini"
-                        @click="handleAdd"
-                        v-hasPermi="['farming:patrol_task:add']"
-                >新增</el-button>
-            </el-col>
-            <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-        </el-row>-->
-        <el-form :inline="true"  class="demo-form-inline">
+    <div class="app-container document-wraper">
+        <el-form :inline="true"  class="document-form-inline">
             <el-form-item label="编辑模式">
                 <el-select
                         v-model="cmEditorMode"
@@ -77,11 +49,12 @@
                 <el-button type="primary" @click="getValue">执行</el-button>
             </el-form-item>
         </el-form>
-        <el-table v-loading="loading" :data="patrol_taskList"
-                  row-key="taskId" :tree-props="treeProp" :cell-style="listCellStyle" :header-cell-style="listStyle">
-            <el-table-column label="文件名" align="center" prop="taskName" />
+        <el-table v-loading="loading" :data="listData"
+                  row-key="path" :tree-props="treeProp"
+                  :cell-style="listCellStyle">
+            <el-table-column label="文件名" align="center" prop="name" />
             <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-                <template slot-scope="scope" v-if="scope.row.type === 2">
+                <template slot-scope="scope" v-if="scope.row.type === false">
                     <el-button
                             size="mini"
                             type="text"
@@ -97,8 +70,7 @@
                 </template>
             </el-table-column>
         </el-table>
-
-        <el-pagination
+        <!--<el-pagination
                 class="pagination"
                 background
                 v-show="total"
@@ -107,71 +79,28 @@
                 :limit.sync="queryParams.pageSize"
                 layout="prev, pager, next,jumper"
                 @pagination="getList"
-        />
-
-        <!-- 添加或修改巡查任务对话框 -->
-        <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-            <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-                <el-form-item label="文件名" prop="taskName">
-                    <el-input v-model="form.taskId" placeholder="请输入文件名"/>
-                </el-form-item>
-                <el-form-item label="内容">
-                </el-form-item>
-            </el-form>
-
-            <div slot="footer" class="dialog-footer" v-show="infoFlag">
-                <el-button type="primary" @click="submitForm">确定</el-button>
-                <el-button @click="cancel">取消</el-button>
-            </div>
-        </el-dialog>
+        />-->
     </div>
 </template>
 
 <script>
     import CodeMirrorEditor from '@/components/editor/codeMirror'
+    // eslint-disable-next-line no-unused-vars
+    import documentApi from "../../api/documentApi";
     export default {
         name: "index",
         data() {
             return {
                 treeProp:{
-                    children: 'children',
-                    hasChildren: 'children.length'
+                    children: 'child',
+                    hasChildren: '!type'
                 },
                 infoFlag:false,
                 // 遮罩层
                 loading: true,
-                // 选中数组
-                ids: [],
-                // 非单个禁用
-                single: true,
-                // 非多个禁用
-                multiple: true,
-                // 显示搜索条件
-                showSearch: true,
-                // 总条数
-                total: 0,
-                // 巡查任务表格数据
-                patrol_taskList: [],
-                // 弹出层标题
-                title: "",
-                // 是否显示弹出层
-                open: false,
-                // 任务状态字典
-                taskStatusOptions: [],
-                // 查询参数
-                queryParams: {
-                    pageNum: 1,
-                    pageSize: 10,
-                },
-                // 表单参数
-                form: {},
-                // 表单校验
-                rules: {
-                },
+                listData:[],
                 cmTheme: "default", // codeMirror主题
-
                 // codeMirror主题选项
-
                 cmThemeOptions: [
 
                     "default",
@@ -183,11 +112,6 @@
                     "abcdef",
 
                     "ambiance",
-
-                    "ayu-dark",
-
-                    "ayu-mirage",
-
                     "base16-dark",
 
                     "base16-light",
@@ -232,11 +156,6 @@
 
                     "material",
 
-                    "material-darker",
-
-                    "material-palenight",
-
-                    "material-ocean",
 
                     "mbo",
 
@@ -246,7 +165,6 @@
 
                     "monokai",
 
-                    "moxer",
 
                     "neat",
 
@@ -274,9 +192,6 @@
 
                     "shadowfox",
 
-                    "solarized dark",
-
-                    "solarized light",
 
                     "the-matrix",
 
@@ -301,11 +216,8 @@
                     "zenburn"
 
                 ],
-
                 cmEditorMode: "default", // 编辑模式
-
                 // 编辑模式选项
-
                 cmEditorModeOptions: [
 
                     "default",
@@ -329,11 +241,8 @@
                     "python"
 
                 ],
-
                 cmMode: "application/json", //codeMirror模式
-
                 jsonIndentation: 2, // json编辑模式下，json格式化缩进 支持字符或数字，最大不超过10，默认缩进2个空格
-
                 autoFormatJson: true // json编辑模式下，输入框失去焦点时是否自动格式化，true 开启， false 关闭
             };
         },
@@ -342,9 +251,6 @@
         },
         created() {
             this.getList();
-            /*this.getDicts("sys_yes_no").then(response => {
-                this.taskStatusOptions = response.data;
-            });*/
         },
         mounted(){
             let value = localStorage.getItem('codeStorage')
@@ -352,91 +258,31 @@
         },
         methods: {
             /** 查询巡查任务列表 */
-            getList() {
+            async getList() {
                 this.loading = true;
-                console.log('getList:')
-                const response = {
-                    rows:[
-                        {
-                            taskId:1,
-                            taskName:'1',
-                            type:1,
-                            children:[
-                                {
-                                    taskId:11,
-                                    taskName:11,
-                                    type:1,
-                                    children:[
-                                        {
-                                            taskId:111,
-                                            taskName:111,
-                                            type:2,
-                                        },
-                                        {
-                                            taskId:112,
-                                            taskName:112,
-                                            type:2,
-                                        }
-                                    ]
-                                },
-                                {
-                                    taskId: 12,
-                                    taskName: 12,
-                                    type:1,
-                                    children: []
-                                }
-                            ]
-                        }
-                    ],
-                    total:100
+                const res = await documentApi.getDocumentList()
+                console.log(res)
+                if(res.code == 200)
+                {
+                    this.listData = res.data
+                    this.loading = false;
+                    console.log(this.listData)
+                    this.$forceUpdate()
                 }
-                this.patrol_taskList = response.rows;
-                this.total = response.total;
-                this.loading = false;
-            },
-            // 取消按钮
-            cancel() {
-                this.open = false;
-                this.reset();
-            },
-            // 表单重置
-            reset() {
-                this.form = {
-                    taskId: null,
-                    taskName: null,
-                };
-                //this.resetForm("form");
             },
             /** 修改按钮操作 */
             // eslint-disable-next-line no-unused-vars
             handleUpdate(row) {
+                const path = row.path
+                const name = row.name
+                //localStorage.getItem('path',path)
                 this.$router.push({
-                    name:'documentConfig'
-                })
-                /*this.reset();
-                // eslint-disable-next-line no-unused-vars
-                const taskId = row.taskId
-                this.form = row;
-                this.open = true;
-                this.title = "修改文件";
-                this.infoFlag = true*/
-            },
-            /** 提交按钮 */
-            submitForm() {
-                console.log(this.form.taskName)
-                /*this.$refs["form"].validate(valid => {
-                    if (valid) {
-                        if (this.form.taskId != null) {
-                            this.msgSuccess("修改成功");
-                            this.open = false;
-                            this.getList();
-                        } else {
-                            this.msgSuccess("新增成功");
-                            this.open = false;
-                            this.getList();
-                        }
+                    name:'documentConfig',
+                    params:{
+                        name,
+                        path
                     }
-                });*/
+                })
             },
             /** 删除按钮操作 */
             handleDelete(row) {
@@ -531,9 +377,12 @@
             getValue() {
 
                 let content = this.$refs.cmEditor.getValue();
+                const contents = JSON.stringify(localStorage.getItem('codeStorage'))
+                if(content === contents)
+                {
+                    return
+                }
                 localStorage.setItem('codeStorage',content)
-                console.log(content);
-
             },
             //修改内容
 
@@ -561,65 +410,3 @@
         }
     }
 </script>
-
-<style scoped>
-.pagination{
-    margin-top: 20px;
-}
-.demo-form-inline{
-    display: flex;
-    justify-content: flex-start;
-}
-</style>
-<style>
-
-    .CodeMirror {
-        text-align: left;
-        width: 400px;
-        line-height: 30px;
-        /*position: absolute;
-
-        top: 80px;
-
-        left: 2px;
-
-        right: 5px;
-
-        bottom: 0px;*/
-
-    //padding: 2px;
-
-    //height: 100px;
-
-    //overflow-y: auto;
-    //overflow-x:auto;
-    }
-
-</style>
-<style lang="scss" scoped>
-
-    .code-mirror-div {
-
-        /*position: absolute;
-
-        top: 30px;
-
-        left: 2px;
-
-        right: 5px;
-
-        bottom: 0px;*/
-
-        //padding: 2px;
-
-        /*.tool-bar {
-
-            top: 20px;
-
-            margin: 30px 2px 0px 20px;
-
-        }*/
-
-    }
-
-</style>
