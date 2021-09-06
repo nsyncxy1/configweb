@@ -8,7 +8,7 @@ import java.util.List;
 public class FileVo {
 
     private String name;
-    private String fullName;
+    private String path;
     private boolean type;
     private List<FileVo> child;
 }
