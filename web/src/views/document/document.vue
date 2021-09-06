@@ -46,7 +46,7 @@
                 ></code-mirror-editor>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="getValue">执行</el-button>
+                <el-button type="primary" @click="handleShell">执行</el-button>
             </el-form-item>
         </el-form>
         <el-table v-loading="loading" :data="listData"
@@ -95,6 +95,7 @@
                     children: 'child',
                     hasChildren: '!type'
                 },
+                command:'',
                 infoFlag:false,
                 // 遮罩层
                 loading: true,
@@ -216,12 +217,10 @@
                     "zenburn"
 
                 ],
-                cmEditorMode: "default", // 编辑模式
+                cmEditorMode: "markdown", // 编辑模式
                 // 编辑模式选项
                 cmEditorModeOptions: [
-
-                    "default",
-
+                    "markdown",
                     "json",
 
                     "sql",
@@ -236,12 +235,10 @@
 
                     "yaml",
 
-                    "markdown",
-
                     "python"
 
                 ],
-                cmMode: "application/json", //codeMirror模式
+                cmMode: "text/plain", //codeMirror模式
                 jsonIndentation: 2, // json编辑模式下，json格式化缩进 支持字符或数字，最大不超过10，默认缩进2个空格
                 autoFormatJson: true // json编辑模式下，输入框失去焦点时是否自动格式化，true 开启， false 关闭
             };
@@ -254,9 +251,24 @@
         },
         mounted(){
             let value = localStorage.getItem('codeStorage')
-            this.$refs.cmEditor.setValue(JSON.stringify(value));
+            this.$refs.cmEditor.setValue(value);
         },
         methods: {
+            async handleShell(){
+                const command = this.getValue()
+                const params = {
+                    command
+                }
+                const res = await documentApi.handleShell(params)
+                if(res.code == 200)
+                {
+                    this.$notify({
+                        title: '成功',
+                        message: res.msg,
+                        type: 'success'
+                    });
+                }
+            },
             /** 查询巡查任务列表 */
             async getList() {
                 this.loading = true;
@@ -275,7 +287,6 @@
             handleUpdate(row) {
                 const path = row.path
                 const name = row.name
-                //localStorage.getItem('path',path)
                 this.$router.push({
                     name:'documentConfig',
                     params:{
@@ -375,14 +386,16 @@
             //获取内容
 
             getValue() {
-
                 let content = this.$refs.cmEditor.getValue();
-                const contents = JSON.stringify(localStorage.getItem('codeStorage'))
+                const contents =localStorage.getItem('codeStorage')
                 if(content === contents)
                 {
-                    return
+                    return content
                 }
-                localStorage.setItem('codeStorage',content)
+                else {
+                    localStorage.setItem('codeStorage',content)
+                    return content
+                }
             },
             //修改内容
 

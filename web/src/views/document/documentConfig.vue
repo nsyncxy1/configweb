@@ -239,6 +239,10 @@
                 const res = await documentApi.getDocumentInfo({
                     path:this.path
                 })
+                /*const res = {
+                    code:200,
+                    data:'aa\n bb'
+                }*/
                 console.log(res)
                 if(res.code === 200)
                 {
@@ -251,8 +255,24 @@
                 }
             },
             async submit(){
-                //const content = this.getValue()
-                //const res = await documentApi({})
+                const content = this.getValue()
+                const data = {
+                    content,
+                    path:this.path
+                }
+                const res = await documentApi.updateDocumentInfo(data)
+                console.log(res)
+                if(res.code == 200)
+                {
+                    this.$notify({
+                        title: '成功',
+                        message: '数据已更新',
+                        type: 'success'
+                    });
+                    this.$router.replace({
+                        name:'document'
+                    })
+                }
             },
             cancel(){
               this.$router.back()
