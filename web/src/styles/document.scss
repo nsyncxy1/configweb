@@ -3,6 +3,17 @@
     display: flex;
     justify-content: flex-start;
   }
+  .upload-form-inline{
+    display: flex;
+    justify-content: flex-start;
+    .upload-document{
+      width: 335px;
+      .el-upload-list__item-name{
+        text-align: left;
+      }
+    }
+  }
+
   .pagination{
     margin-top: 20px;
   }

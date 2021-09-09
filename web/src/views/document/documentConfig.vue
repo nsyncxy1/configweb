@@ -239,10 +239,6 @@
                 const res = await documentApi.getDocumentInfo({
                     path:this.path
                 })
-                /*const res = {
-                    code:200,
-                    data:'aa\n bb'
-                }*/
                 console.log(res)
                 if(res.code === 200)
                 {
@@ -251,7 +247,6 @@
                     {
                         this.setValue(data)
                     }
-
                 }
             },
             async submit(){

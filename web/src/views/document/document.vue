@@ -49,6 +49,32 @@
                 <el-button type="primary" @click="handleShell">执行</el-button>
             </el-form-item>
         </el-form>
+        <el-form :inline="false" class="upload-form-inline" label-position="left">
+            <el-form-item label="上传架包文件">
+                <el-upload
+                        class="upload-document"
+                        ref="upload"
+                        :limit="5"
+                        multiple
+                        accept=".jar,.rar,.zip,.html"
+                        action="https://jsonplaceholder.typicode.com/posts/"
+                        :on-preview="handlePreview"
+                        :on-remove="handleRemove"
+                        :on-exceed="handleExceed"
+                        :before-upload="beforeAvatarUpload"
+                        :file-list="fileList"
+                        :on-success="handleSuccess"
+                        :http-request="handleUpload"
+                        :auto-upload="false">
+                    <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                    <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传文件</el-button>
+                    <div slot="tip" class="el-upload__tip">只能上传zip,jar,rar文件，且不超过20MB</div>
+                </el-upload>
+            </el-form-item>
+            <!--<el-form-item>
+                <el-button type="primary">上传</el-button>
+            </el-form-item>-->
+        </el-form>
         <el-table v-loading="loading" :data="listData"
                   row-key="path" :tree-props="treeProp"
                   :cell-style="listCellStyle">
@@ -61,12 +87,12 @@
                             icon="el-icon-edit"
                             @click="handleUpdate(scope.row)"
                     >修改</el-button>
-                    <el-button
+                    <!--<el-button
                             size="mini"
                             type="text"
                             icon="el-icon-delete"
                             @click="handleDelete(scope.row)"
-                    >删除</el-button>
+                    >删除</el-button>-->
                 </template>
             </el-table-column>
         </el-table>
@@ -87,16 +113,19 @@
     import CodeMirrorEditor from '@/components/editor/codeMirror'
     // eslint-disable-next-line no-unused-vars
     import documentApi from "../../api/documentApi";
+    import {getFileName} from "@/utils/format";
     export default {
         name: "index",
         data() {
             return {
                 treeProp:{
                     children: 'child',
-                    hasChildren: '!type'
+                    hasChildren:'!type'
                 },
                 command:'',
                 infoFlag:false,
+                // 文件上传
+                fileList:[],
                 // 遮罩层
                 loading: true,
                 listData:[],
@@ -254,6 +283,45 @@
             this.$refs.cmEditor.setValue(value);
         },
         methods: {
+            submitUpload() {
+                this.$refs.upload.submit();
+            },
+            async handleUpload(){
+                console.log('handleUpload:')
+                console.log(this.fileList)
+            },
+            handleRemove(file, fileList) {
+                console.log(file, fileList);
+            },
+            handlePreview(file) {
+                console.log(file);
+            },
+            handleSuccess(res,file,fileList){
+                console.log('handleSuccess:')
+                console.log(res,file,fileList)
+            },
+            handleExceed(files, fileList){
+                console.log(files,fileList)
+                this.$message.warning(`每次最多上传5个文件`);
+            },
+            beforeAvatarUpload(file) {
+                console.log('beforeAvatarUpload:')
+                console.log(file)
+                const type = ['zip','application/x-zip-compressed','rar','jar','html',]
+                const name = file.name
+                const ext = getFileName(name)
+                console.log('ext:'+ext)
+                const isJPG = type.indexOf(ext) !== -1;
+                const isLt2M = file.size / 1024 / 1024 < 20;
+                if (!isJPG) {
+                    this.$message.error('上传文件格式错误');
+                }
+                if (!isLt2M) {
+                    this.$message.error('单个上传文件大小不能超过 20MB!');
+                }
+                console.log(isJPG && isLt2M)
+                return isJPG && isLt2M;
+            },
             async handleShell(){
                 const command = this.getValue()
                 const params = {
@@ -384,7 +452,6 @@
 
             },
             //获取内容
-
             getValue() {
                 let content = this.$refs.cmEditor.getValue();
                 const contents =localStorage.getItem('codeStorage')
@@ -398,7 +465,6 @@
                 }
             },
             //修改内容
-
             setValue() {
 
                 let jsonValue = {

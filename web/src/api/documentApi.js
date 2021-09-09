@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 const documentApi = {
     // 执行命令
-    handleShell(params){
+    handleShell(data){
       return request({
-          method:'get',
+          method:'post',
           url:'/file/command',
-          params
+          data
       })
     },
     // 获取文件目录
