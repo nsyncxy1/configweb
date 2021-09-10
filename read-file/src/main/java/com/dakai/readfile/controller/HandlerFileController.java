@@ -3,30 +3,44 @@ package com.dakai.readfile.controller;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import com.dakai.readfile.domain.AjaxResult;
+import com.dakai.readfile.domain.CommandVo;
 import com.dakai.readfile.domain.FileContentVo;
 import com.dakai.readfile.domain.FileVo;
 import com.dakai.readfile.utils.EncodingDetect;
+import com.dakai.readfile.utils.FileUploadUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/file")
+@ConfigurationProperties(prefix = "dakai")
 public class HandlerFileController {
 
-    @Value("${dakai.path}")
-    private String path;
+    private String uploadPath;
 
+    public void setUploadPath(String uploadPath) {
+        this.uploadPath = uploadPath;
+    }
+
+    private String[] paths;
+    public void setPaths(String[] paths) {
+        this.paths = paths;
+    }
+
+
+    //按行读取
     @PostMapping("/readline")
     public AjaxResult readLine(@RequestParam("path") String path) {
         StringBuilder sb = new StringBuilder();
@@ -53,6 +67,7 @@ public class HandlerFileController {
         return AjaxResult.success("success", sb.toString());
     }
 
+    //读取整个文件
     @PostMapping("/read")
     public AjaxResult readFile(@RequestParam("path") String path) {
 
@@ -105,49 +120,87 @@ public class HandlerFileController {
     @GetMapping("/getDirectory")
     public AjaxResult directory() {
 
+//        List<List<FileVo>> lists = new ArrayList<>();
+        Map<String,List<FileVo>> map = new HashMap<>();
+
+        for (String path : paths) {
+
         File f = new File(path);//获取路径  F:\测试目录
         if (!f.exists()) {
-            return AjaxResult.error(path + " not exists");
+            continue;
         }
 
-        List<FileVo> list = new ArrayList<>();
+            List<FileVo> list = new ArrayList<>();
 
         File fa[] = f.listFiles();//用数组接收  F:\笔记总结\C#, F:\笔记总结\if语句.txt
         for (int i = 0; i < fa.length; i++) {//循环遍历
             File fs = fa[i];//获取数组中的第i个
             list.add(searchDir(fs));
         }
-
-        return AjaxResult.success(list);
+            map.put(path, list);
+        }
+        return AjaxResult.success(map);
     }
 
 
-    @GetMapping("command")
-    public AjaxResult doCommand(@RequestParam("command") String command) {
 
+
+    @PostMapping("/command")
+    public AjaxResult doCommand(@RequestBody CommandVo commandVo) {
+
+   /*     String osName = System.getProperties().getProperty("os.name");
+        System.out.println("Your OS is :"+osName);
+        if (!("Linux".equals(osName))) {
+            return AjaxResult.error("Os must be Linux.");
+        }*/
+
+        String command = commandVo.getCommand();
         boolean abc = StrUtil.containsAny(command, "rm");
         if (abc) {
             return AjaxResult.error("Contains illegal characters.");
         }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("Run the command:").append(command).append("\n");
 
+        StringBuilder sb = new StringBuilder();
+//        sb.append("Run the command:").append(command).append("\n");
+        BufferedReader br = null;
         try {
             //      logger.info("启用失败或删除wifi后删除连接信息:"+cmd);
-            Process p =  Runtime.getRuntime().exec(command);
-            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+//            List<String> commandList = new ArrayList<>();
+//            commandList.add("/bin/sh");
+//            commandList.add("-c");
+//            commandList.add(command);
+            Process p =  Runtime.getRuntime().exec(new String[]{"/bin/sh","-c",command});
+            br = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line = null;
             //   StringBuilder result = new StringBuilder();
             while ((line = br.readLine()) != null) {
                 sb.append(line).append("\n");
+                System.out.println("info--->"+line);
             }
         } catch (Exception e) {
             e.printStackTrace();
-
+            String errorString = e.toString();
+            System.out.println("err--->"+errorString);
+        }finally {
+            IoUtil.close(br);
         }
 
         return AjaxResult.success(sb.toString());
+    }
+
+    @PostMapping("/upload")
+    public AjaxResult upload(MultipartFile file) {
+
+        System.out.println(uploadPath);
+        try {
+            FileUploadUtils.upload(uploadPath, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return AjaxResult.success();
     }
 
 
