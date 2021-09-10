@@ -1,6 +1,6 @@
 <template>
     <div class="app-container document-wraper">
-        <el-form :inline="true"  class="document-form-inline">
+        <!--<el-form :inline="true"  class="document-form-inline">
             <el-form-item label="编辑模式">
                 <el-select
                         v-model="cmEditorMode"
@@ -68,15 +68,21 @@
                         :auto-upload="false">
                     <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                     <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传文件</el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传zip,jar,rar文件，且不超过20MB</div>
+                    <div slot="tip" class="el-upload__tip">只能上传zip,jar,rar,html文件，且不超过20MB</div>
                 </el-upload>
             </el-form-item>
-            <!--<el-form-item>
+            &lt;!&ndash;<el-form-item>
                 <el-button type="primary">上传</el-button>
-            </el-form-item>-->
+            </el-form-item>&ndash;&gt;
+        </el-form>-->
+        <el-form :inline="true"  class="document-form-inline">
+            <el-form-item>
+                <el-button type="primary" @click="handleShells">进入Shell</el-button>
+            </el-form-item>
         </el-form>
         <el-table v-loading="loading" :data="listData"
                   row-key="path" :tree-props="treeProp"
+                  border
                   :cell-style="listCellStyle">
             <el-table-column label="文件名" align="center" prop="name" />
             <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -273,22 +279,33 @@
             };
         },
         components: {
+            // eslint-disable-next-line vue/no-unused-components
             CodeMirrorEditor
         },
         created() {
             this.getList();
         },
         mounted(){
-            let value = localStorage.getItem('codeStorage')
-            this.$refs.cmEditor.setValue(value);
+            //let value = localStorage.getItem('codeStorage')
+            //this.$refs.cmEditor.setValue(value);
         },
         methods: {
-            submitUpload() {
-                this.$refs.upload.submit();
+            handleShells(){
+                const host = window.location.origin
+                console.log(window.location)
+                console.log('host:'+host)
+                const url = `${host}/#/shell`
+                console.log(url)
+                window.open(url,'_blank')
             },
-            async handleUpload(){
-                console.log('handleUpload:')
+            submitUpload() {
+                console.log('submitUploads:')
                 console.log(this.fileList)
+                //this.$refs.upload.submit();
+            },
+            handleUpload(file){
+                console.log('handleUploads:')
+                console.log(file.file)
             },
             handleRemove(file, fileList) {
                 console.log(file, fileList);
@@ -299,6 +316,11 @@
             handleSuccess(res,file,fileList){
                 console.log('handleSuccess:')
                 console.log(res,file,fileList)
+                this.$notify({
+                    title: '上传成功',
+                    message: (res && res.msg) || '',
+                    type: 'success'
+                });
             },
             handleExceed(files, fileList){
                 console.log(files,fileList)
