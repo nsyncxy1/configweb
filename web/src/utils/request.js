@@ -1,13 +1,19 @@
 import axios from "axios"
 import {Message} from "element-ui";
+import {getToken} from "@/utils/auth";
 const request = axios.create({
     baseURL:process.env["VUE_APP_BASE_API"],
-    //baseURL:process.env.NODE_PATH === 'production' ? 'http://41.204.2.93:8021': '/api',
-    //baseURL:'http://127.0.0.1:8021',
-    //baseURL:'http://41.204.2.93:8021',
+    timeout:100000,
+})
+export const login = axios.create({
+    baseURL:process.env["VUE_APP_BASE_API"],
     timeout:100000,
 })
 request.interceptors.request.use(function (config) {
+    if(getToken())
+    {
+        config.headers['Authorization'] = getToken()
+    }
     return config
 },function (error) {
     console.error(error)
@@ -23,7 +29,28 @@ request.interceptors.response.use( (response) => {
         })
         return Promise.reject('error')
     }
-    return response
+    return res
+},function (error) {
+    //console.error(error)
+    return Promise.reject(error)
+})
+login.interceptors.request.use(function (config) {
+    return config
+},function (error) {
+    console.error(error)
+    return Promise.reject(error)
+})
+login.interceptors.response.use( (response) => {
+    const res = response.data || null
+    if((!res.code || res.code != 200) && res.message)
+    {
+        Message.error({
+            message:res.message,
+            duration:1800
+        })
+        return Promise.reject('error')
+    }
+    return res
 },function (error) {
     //console.error(error)
     return Promise.reject(error)

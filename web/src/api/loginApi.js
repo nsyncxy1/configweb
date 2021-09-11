@@ -1,19 +1,19 @@
-import request from "@/utils/request"
+import {login} from "@/utils/request"
 const loginApi = {
-    loginUser(params){
-        return request({
+    loginUser(data){
+        return login({
             // post请求也可以用params方式传值
-            url:'/userService/user/login',
+            url:'/login',
             method:'post',
-            params
+            data
         })
     },
-    exitUser(data){
+    /*exitUser(data){
         return request({
             url:'/userService/user/loginOut',
             method:'post',
             data
         })
-    }
+    }*/
 }
 export default loginApi

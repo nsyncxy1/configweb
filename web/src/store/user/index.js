@@ -11,7 +11,7 @@ const user = {
         SET_TOKEN(state,payload){
             if(payload)
             {
-                const token = JSON.stringify(payload)
+                const token = payload
                 setToken(token)
                 state.token = getToken()
             }
@@ -25,32 +25,44 @@ const user = {
         async loginUser({commit},payload){
             //console.log('loginUser:')
             //console.log(payload)
-            const resData= await loginApi.loginUser(payload)
-            const res = resData.data
-            //console.log("res:"+res)
+            const res= await loginApi.loginUser(payload)
+            console.log("res:")
+            console.log(res)
             if(res.code && res.code == 200)
             {
-                commit('SET_TOKEN',res.data.userInfo)
+                commit('SET_TOKEN',res.data.token)
                 //console.log(getToken())
+                Message.success({
+                    message:res.msg,
+                    duration:1000
+                })
                 router.push({path:'/dash'})
             }
-            if(res.code && res.code == 201)
+            else if(res.code && res.code == 201)
             {
                 Message.error({
-                    message:res.message,
+                    message:res.msg,
+                    duration:1800
+                })
+                return false
+            }else {
+                Message.error({
+                    message:res.msg,
                     duration:1800
                 })
                 return false
             }
         },
         async exitUser({commit}){
-            const resData = await loginApi.exitUser()
+            /*const resData = await loginApi.exitUser()
             const res = resData.data
             if(res.code && res.code == 200)
             {
                 commit('REMOVE_TOKEN')
                 router.push({path:'/login'})
-            }
+            }*/
+            commit('REMOVE_TOKEN')
+            router.push({path:'/login'})
         }
     }
 }

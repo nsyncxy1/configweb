@@ -28,7 +28,7 @@ const constantRoutes = [
     },
     {
       path: '/',
-      redirect:'/dash'
+      redirect:'/login'
     },
     {
         path: '/dash',
@@ -43,6 +43,7 @@ const constantRoutes = [
                 path:'/documentIndex',
                 name:'documentIndex',
                 component:documentIndex,
+                redirect:'/documentIndex/document',
                 meta:{
                     title:'文件管理'
                 },
@@ -56,7 +57,7 @@ const constantRoutes = [
                         }
                     },
                     {
-                        path: 'documentConfig',
+                        path: 'documentConfig/:path/:name',
                         name: 'documentConfig',
                         component:documentConfig,
                         meta: {
