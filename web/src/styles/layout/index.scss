@@ -9,7 +9,9 @@
     .layout-main{
       padding: 0;
       .layout-box{
-        padding: 0 1.5rem;
+        box-sizing: border-box;
+        height: 100%;
+        //padding: 0 1.5rem;
       }
     }
   }
@@ -31,7 +33,7 @@
   justify-content: space-between;
   background-color: #fff;
   padding-left: 1rem;
-  margin-bottom: 2rem;
+  //margin-bottom: 2rem;
   .layout-dropdown{
     display: block;
     width: 5rem;

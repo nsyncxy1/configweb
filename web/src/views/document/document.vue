@@ -291,12 +291,14 @@
         },
         methods: {
             handleShells(){
-                const host = window.location.origin
+                /*const host = window.location.origin
                 console.log(window.location)
                 console.log('host:'+host)
                 const url = `${host}/#/shell`
                 console.log(url)
-                window.open(url,'_blank')
+                window.open(url,'_blank')*/
+                const url = window.location.origin
+                window.location.href = url + '/?#/shellIndex/shells'
             },
             submitUpload() {
                 console.log('submitUploads:')
@@ -370,6 +372,28 @@
                     this.loading = false;
                     console.log(this.listData)
                     this.$forceUpdate()
+                }
+            },
+            handleDirect(rows){
+                let length = rows.length || 0
+                if(!length)
+                {
+                    return
+                }else{
+                    const result = []
+                    for(let i=0;i<length;i++) {
+                        const item = {}
+                        const row = rows[i]
+                        for (let key in row)
+                        {
+                            item.name = key
+                            item.path = key
+                            item.type = true
+                            item.child = row[key]
+                        }
+                        result.push(item)
+                    }
+                    this.listData = result
                 }
             },
             /** 修改按钮操作 */
