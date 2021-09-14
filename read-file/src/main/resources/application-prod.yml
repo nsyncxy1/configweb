@@ -29,8 +29,6 @@ server:
       min-spare: 30
 # Spring配置
 spring:
-  thymeleaf:
-    cache: false
   application:
     name: @project.name@
   # 服务模块
@@ -40,15 +38,14 @@ spring:
       enabled: false
   web:
     resources:
-      # 静态资源的配置位置，可以写成一个数组配置多个目录
-      static-locations: classpath:/static/
-  mvc:
-    static-path-pattern: /static/**
-    view:
-      # 给返回的页面添加后缀名
-      suffix: .html
-      # 定位模板的目录
-      prefix: classpath:/templates/
+      static-locations: file:/opt/xnm/webshell
+  #  mvc:
+#    static-path-pattern: /static/**
+#    view:
+#      # 给返回的页面添加后缀名
+#      suffix: .html
+#      # 定位模板的目录
+#      prefix: classpath:/templates/
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8

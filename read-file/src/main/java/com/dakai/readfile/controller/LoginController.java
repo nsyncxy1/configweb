@@ -36,4 +36,10 @@ public class LoginController {
     }
 
 
+    @GetMapping("/test")
+    public AjaxResult test(){
+        return AjaxResult.success("test success...");
+    }
+
+
 }

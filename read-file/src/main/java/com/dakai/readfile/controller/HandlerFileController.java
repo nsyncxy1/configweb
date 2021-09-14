@@ -120,9 +120,9 @@ public class HandlerFileController {
     @GetMapping("/getDirectory")
     public AjaxResult directory() {
 
-//        List<List<FileVo>> lists = new ArrayList<>();
-        Map<String,List<FileVo>> map = new HashMap<>();
 
+//        List<Map<String,List<FileVo>>> lists = new ArrayList<>();
+        List<FileVo> list = new ArrayList<>();
         for (String path : paths) {
 
         File f = new File(path);//获取路径  F:\测试目录
@@ -130,16 +130,20 @@ public class HandlerFileController {
             continue;
         }
 
-            List<FileVo> list = new ArrayList<>();
+            list.add(searchDir(f));
 
-        File fa[] = f.listFiles();//用数组接收  F:\笔记总结\C#, F:\笔记总结\if语句.txt
+
+
+        /*File fa[] = f.listFiles();//用数组接收  F:\笔记总结\C#, F:\笔记总结\if语句.txt
         for (int i = 0; i < fa.length; i++) {//循环遍历
             File fs = fa[i];//获取数组中的第i个
             list.add(searchDir(fs));
         }
+            Map<String,List<FileVo>> map = new HashMap<>();
             map.put(path, list);
+            lists.add(map);*/
         }
-        return AjaxResult.success(map);
+        return AjaxResult.success(list);
     }
 
 
