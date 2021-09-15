@@ -3,6 +3,7 @@
 package com.dakai.readfile.webshell.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.dakai.readfile.webshell.Constants;
 import com.dakai.readfile.webshell.utils.EhCacheUtils;
 import com.dakai.readfile.webshell.utils.SftpFileUtils;
@@ -14,6 +15,7 @@ import com.dakai.readfile.webshell.vo.WebShellData;
 import com.jcraft.jsch.SftpException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -48,8 +50,9 @@ public class SftpController {
 	 * @date 2021/3/1 14:10
 	 */
 	@GetMapping("getFileTree")
-	public ApiResult<List<SftpFileTreeVo>> getFileTree(String path) {
-		String sessionId = WebShellUtils.getSessionId();
+	public ApiResult<List<SftpFileTreeVo>> getFileTree(String path,HttpServletRequest request) {
+//		String sessionId = WebShellUtils.getSessionId();
+		String sessionId = WebShellUtils.getIpAddr(request);
 		log.info("sessionId：{}", sessionId);
 		// 存放ssh连接信息
 		WebShellData sshData = EhCacheUtils.get(sessionId);
@@ -65,6 +68,20 @@ public class SftpController {
 		return result;
 	}
 
+	@GetMapping("setParams")
+	public void setParams(String params,HttpServletRequest request) {
+//		String sessionId = WebShellUtils.getSessionId();
+		String sessionId = WebShellUtils.getIpAddr(request);
+		log.info("sessionId：{}", sessionId);
+		WebShellData sshData = JSON.parseObject(params, WebShellData.class);
+		// 存放ssh连接信息
+		if (sshData != null) {
+				EhCacheUtils.put(sessionId, sshData);
+		} else {
+			sshData = EhCacheUtils.get(sessionId);
+		}
+	}
+
 	/**
 	 * 上传文件到服务器
 	 * @param request HttpServletRequest
@@ -74,8 +91,10 @@ public class SftpController {
 	 */
 	@PostMapping("/upload")
 	public ApiResult<String> upload(HttpServletRequest request) {
+
 		List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
-		String sessionId = WebShellUtils.getSessionId();
+//		String sessionId = WebShellUtils.getSessionId();
+		String sessionId = WebShellUtils.getIpAddr(request);
 		log.info("sessionId：{}", sessionId);
 		// 存放ssh连接信息
 		WebShellData sshData = EhCacheUtils.get(sessionId);
@@ -109,11 +128,12 @@ public class SftpController {
 	 * @date 2021/3/2 20:46
 	 */
 	@GetMapping("/download")
-	public void download(String path, HttpServletResponse response) {
+	public void download(String path, HttpServletResponse response,HttpServletRequest request) {
 		if (StringUtils.isBlank(path)) {
 			return;
 		}
-		String sessionId = WebShellUtils.getSessionId();
+//		String sessionId = WebShellUtils.getSessionId();
+		String sessionId = WebShellUtils.getIpAddr(request);
 		log.info("sessionId：{}", sessionId);
 		// 文件名
 		String fileName = path.substring(path.lastIndexOf(Constants.SEPARATOR) + 1);
@@ -155,12 +175,13 @@ public class SftpController {
 	 * @date 2021/3/4 21:05
 	 */
 	@DeleteMapping
-	public ApiResult<String> deleteFile(String path){
+	public ApiResult<String> deleteFile(String path,HttpServletRequest request){
 		ApiResult<String> result = ApiResult.builder();
 		if (StringUtils.isBlank(path)) {
 			return result.error(404, "文件路径为空！");
 		}
-		String sessionId = WebShellUtils.getSessionId();
+//		String sessionId = WebShellUtils.getSessionId();
+		String sessionId = WebShellUtils.getIpAddr(request);
 		log.info("sessionId：{}，删除文件path：{}", sessionId, path);
 		// 存放ssh连接信息
 		WebShellData sshData = EhCacheUtils.get(sessionId);

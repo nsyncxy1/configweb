@@ -134,7 +134,7 @@ public class WebShellService {
 		//设置密码
 		session.setPassword(SecretUtils.decrypt(sshData.getPassword(), SecretUtils.AES_KEY));
 		//连接超时时间30s
-		session.connect(30000);
+		session.connect(600000);
 
 		//开启shell通道
 		Channel channel = session.openChannel("shell");

@@ -36,16 +36,9 @@ spring:
     restart:
       # 热部署重启开关，不重启实现快速热部署
       enabled: false
-  web:
-    resources:
-      static-locations: file:/opt/xnm/webshell
-  #  mvc:
-#    static-path-pattern: /static/**
-#    view:
-#      # 给返回的页面添加后缀名
-#      suffix: .html
-#      # 定位模板的目录
-#      prefix: classpath:/templates/
+#  web:
+#    resources:
+#      static-locations: file:/opt/xnm/webshell
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8

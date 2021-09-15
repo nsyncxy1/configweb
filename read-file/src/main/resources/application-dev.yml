@@ -29,7 +29,8 @@ server:
       min-spare: 30
 # Spring配置
 spring:
-
+  thymeleaf:
+    cache: false
   application:
     name: @project.name@
   # 服务模块
@@ -37,11 +38,15 @@ spring:
     restart:
       # 热部署重启开关，不重启实现快速热部署
       enabled: false
-  web:
-    resources:
-      static-locations: file:D:/webshell
+#  web:
+#    resources:
+#      static-locations: file:D:/webshell
 
-  #  mvc:
+#  web:
+#    resources:
+#      # 静态资源的配置位置，可以写成一个数组配置多个目录
+#      static-locations: classpath:/static/
+#  mvc:
 #    static-path-pattern: /static/**
 #    view:
 #      # 给返回的页面添加后缀名

@@ -3,6 +3,7 @@
 package com.dakai.readfile.webshell.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
@@ -16,6 +17,9 @@ import org.springframework.cache.CacheManager;
  */
 @Slf4j
 public final class EhCacheUtils {
+
+
+
 	/** CacheManager */
 	private static final CacheManager CACHE_MANAGER = SpringUtils.getBean(CacheManager.class);
 
