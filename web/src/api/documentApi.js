@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request ,{shell}from '@/utils/request'
 const documentApi = {
     // 执行命令
     handleShell(data){
@@ -13,6 +13,14 @@ const documentApi = {
         return request({
             method:'get',
             url:'/file/getDirectory'
+        })
+    },
+    // sftp前置请求
+    getSftp(params){
+        return shell({
+            method:'get',
+            url:'/sftp/setParams',
+            params
         })
     },
     // 获取文件内容

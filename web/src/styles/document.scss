@@ -1,4 +1,6 @@
 .document-wraper{
+  box-sizing: border-box;
+  padding: 2rem 1.5rem 0;
   .document-form-inline{
     display: flex;
     justify-content: flex-start;

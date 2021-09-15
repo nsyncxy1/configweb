@@ -6,6 +6,10 @@ const Layout = () => import('@/views/layout/layout')
 const documentIndex = () => import('@/views/document/documentIndex')
 const document = () => import('@/views/document/document')
 const documentConfig = () => import('@/views/document/documentConfig')
+const shellIndex = () => import('@/views/shell/shellIndex')
+const shells = () => import('@/views/shell/shells')
+const sftp = () => import('@/views/shell/sftp')
+const shellDemo = () => import('@/views/shell/shellDemo')
 /*const userIndex = () => import('@/views/userInfo/userIndex')
 const userInfo = () => import('@/views/userInfo/userInfo')
 const userConfig = () => import('@/views/userInfo/userConfig')
@@ -62,6 +66,41 @@ const constantRoutes = [
                         component:documentConfig,
                         meta: {
                             title: '文件信息编辑'
+                        }
+                    }
+                ]
+            },
+            {
+                path: '/shellIndex',
+                name: 'shellIndex',
+                component:shellIndex,
+                redirect: '/shellIndex/shells',
+                meta: {
+                    title: 'shell'
+                },
+                children: [
+                    {
+                        path: 'shells',
+                        name: 'shells',
+                        component:shells,
+                        meta: {
+                            title: 'shells'
+                        }
+                    },
+                    {
+                        path: 'sftp',
+                        name: 'sftp',
+                        component:sftp,
+                        meta: {
+                            title: 'sftp'
+                        }
+                    },
+                    {
+                        path: 'shellDemo',
+                        name: 'shellDemo',
+                        component:shellDemo,
+                        meta: {
+                            title: 'shellDemo'
                         }
                     }
                 ]
@@ -178,6 +217,7 @@ const constantRoutes = [
     }
 ]
 const router = new VueRouter({
+    mode:'hash',
     routes:constantRoutes,
 })
 export const asyncRoutes = [

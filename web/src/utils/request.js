@@ -9,6 +9,20 @@ export const login = axios.create({
     baseURL:process.env["VUE_APP_BASE_API"],
     timeout:100000,
 })
+export const shell = axios.create({
+    baseURL:process.env["VUE_APP_BASE_API"],
+    timeout:100000,
+})
+shell.interceptors.request.use(function (config) {
+    if(getToken())
+    {
+        config.headers['Authorization'] = getToken()
+    }
+    return config
+},function (error) {
+    console.error(error)
+    return Promise.reject(error)
+})
 request.interceptors.request.use(function (config) {
     if(getToken())
     {

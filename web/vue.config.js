@@ -14,11 +14,12 @@ module.exports = {
             }
         }
     },
+    // eslint-disable-next-line no-unused-vars
     configureWebpack:(config) => {
-        if(process.env.NODE_ENV === 'production')
+        /*if(process.env.NODE_ENV === 'production')
         {
             config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
-        }
+        }*/
     },
     chainWebpack:(config) => {
         // 修改项目默认title
