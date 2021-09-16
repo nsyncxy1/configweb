@@ -7,6 +7,7 @@
  * @param content 加密内容
  * @returns {*}
  */
+import {getToken} from "@/utils/auth";
 import CryptoJS from './crypto-js.min'
 import $ from 'jquery'
 export let encrypt = function (content) {
@@ -41,6 +42,9 @@ export function uploadFile() {
         data: formData,
         processData: false,  // 不处理数据
         contentType: false,   // 不设置内容类型
+        beforeSend: function(request) {
+            request.setRequestHeader("Authorization",getToken());
+        },
         success: function (res) {
             let tips = fileNames.join(",") + res.data;
             showTips(tips);
@@ -64,6 +68,7 @@ export function checkErr(data) {
  * 刷新数据
  */
 export function refreshTree() {
+    console.log('refreshTree:')
     let val = $('#current_path').val();
     let $tree = $('#file_tree').jstree(true);
     $tree.select_node(val);

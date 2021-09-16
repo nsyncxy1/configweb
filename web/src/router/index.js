@@ -9,6 +9,7 @@ const documentConfig = () => import('@/views/document/documentConfig')
 const shellIndex = () => import('@/views/shell/shellIndex')
 const shells = () => import('@/views/shell/shells')
 const sftp = () => import('@/views/shell/sftp')
+const sftps = () => import('@/views/sftp/sftp')
 const shellDemo = () => import('@/views/shell/shellDemo')
 /*const userIndex = () => import('@/views/userInfo/userIndex')
 const userInfo = () => import('@/views/userInfo/userInfo')
@@ -202,6 +203,14 @@ const constantRoutes = [
                 ]
             },*/
         ]
+    },
+    {
+        path: '/sftp',
+        name: 'sftp',
+        component:sftps,
+        meta: {
+            title: 'sftp'
+        }
     },
     {
         path: '/404',

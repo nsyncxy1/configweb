@@ -51,6 +51,7 @@
         name: "shell",
         data(){
             return {
+                api:process.env["VUE_APP_BASE_API"],
                 term:null,
                 client:null,
                 params:null,
@@ -203,7 +204,7 @@
                     //localStorage.setItem('loginParams',JSON.stringify(params))
                     this.loginParams.operate = 'sftp'
                     const host = window.location.origin
-                    window.open( host+'/#/shellIndex/sftp?params=' + encodeURIComponent(JSON.stringify(this.loginParams)))
+                    window.open( host+this.api+'/#/sftp?params=' + encodeURIComponent(JSON.stringify(this.loginParams)))
                 })
             },
             // 内容全屏显示-窗口大小发生改变时

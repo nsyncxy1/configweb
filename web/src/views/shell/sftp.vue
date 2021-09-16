@@ -74,7 +74,7 @@
                 // 根目录
                 let rootDirectory = { "id": "/", "parent": "#", "text": "/", "icon": "jstree-folder", 'state': { 'opened': true }}
                 $fileTree.on("changed.jstree", function (e, data) {
-                    console.log('changed.jstree')
+                    console.log('changedJstree:')
                     if(data.selected.length) {
                         let selected = data.instance.get_node(data.selected[0])
                         console.log('The selected node is: ' + selected.id);
@@ -100,16 +100,14 @@
                                 },
                                 success : function(res) {
                                     checkErr(res)
+                                    console.log(res)
                                     let fileTree = res.data
                                     if(fileTree) {
-                                        console.log('fileTree:')
-                                        console.log(fileTree)
                                         loadTableData(fileTree);
-                                        console.log('callBack:')
                                         fileTree.unshift(rootDirectory)
-                                        console.log('fileTree:')
+                                        //console.log(_this)
                                         console.log(fileTree)
-                                        //callback.call(_this, fileTree);
+                                        callback.call(this, fileTree);
                                         console.log('callback:')
                                         console.log(callback)
                                     }else{
