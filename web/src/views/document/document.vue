@@ -124,6 +124,7 @@
         name: "index",
         data() {
             return {
+                api:process.env.VUE_APP_BASE_API,
                 treeProp:{
                     children: 'child',
                     hasChildren:'!type'
@@ -298,7 +299,7 @@
                 console.log(url)
                 window.open(url,'_blank')*/
                 const url = window.location.origin
-                window.location.href = url + '/?#/shellIndex/shells'
+                window.location.href = url + this.api +'/?#/shellIndex/shells'
             },
             submitUpload() {
                 console.log('submitUploads:')

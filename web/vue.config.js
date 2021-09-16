@@ -5,7 +5,8 @@ module.exports = {
         open:true,
         proxy:{
             '/api':{
-                target:'http://8.136.153.61:8083', //测试服务器
+                // target:'http://8.136.153.61:8083', //测试服务器
+                target:'http://localhost:8083', //测试服务器
                 //target:'https://nm.dktec.cn/configweb',
                 changeOrigin:true,
                 pathRewrite:{

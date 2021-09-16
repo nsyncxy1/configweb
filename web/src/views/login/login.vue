@@ -50,6 +50,7 @@
                 this.$refs[formName].validate((valid)=>{
                     if(valid)
                     {
+                        console.log('come in...');
                         // this.submitLogin(formName)
                         this.loading = true
                         this.$store.dispatch('user/loginUser', {
@@ -57,8 +58,10 @@
                             password:this.loginForm.password
                         }).then(()=>{
                             this.loading = false
+                            console.log('success..');
                         }).catch(()=>{
                             this.loading = false
+                            console.log('error..');
                         })
                     }else{
                         console.log('error submit!')

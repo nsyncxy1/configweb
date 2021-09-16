@@ -1,8 +1,8 @@
 <template>
     <div class="shells-wraper" id="shells">
-        <a href='https://gitee.com/zmzhou-star/web-shell' style="float: right;">
+ <!--       <a href='https://gitee.com/zmzhou-star/web-shell' style="float: right;">
             <img src='https://gitee.com/zmzhou-star/web-shell/widgets/widget_1.svg' alt='Fork me on Gitee'/>
-        </a>
+        </a>-->
         <div id="login" class="login">
             <h1>登录Linux远程主机</h1>
             <form action="#">
@@ -12,7 +12,7 @@
                 <input type="text" id="port" value="22" required="required" placeholder="端口" />
                 <button class="button" @click="login">登录</button>
             </form>
-            <p class="github-star">
+<!--            <p class="github-star">
                 <a href="https://gitee.com/zmzhou-star/web-shell/stargazers">
                     <img src="https://gitee.com/zmzhou-star/web-shell/badge/star.svg?theme=dark" alt="star">
                 </a>
@@ -25,7 +25,7 @@
                 <a href="https://github.com/zmzhou-star/web-shell/members" target="_blank" rel="noopener">
                     <img src="https://badgen.net/github/forks/zmzhou-star/web-shell?icon=github&color=4ab8a1" data-origin="https://badgen.net/github/forks/zmzhou-star/web-shell?icon=github&color=4ab8a1" alt="forks">
                 </a>
-            </p>
+            </p>-->
         </div>
         <div id="menu" class="menu" style="display: none">
             <label>菜单</label>

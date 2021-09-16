@@ -36,9 +36,9 @@ spring:
     restart:
       # 热部署重启开关，不重启实现快速热部署
       enabled: false
-#  web:
-#    resources:
-#      static-locations: file:/opt/xnm/webshell
+  web:
+    resources:
+      static-locations: file:/opt/xnm/configweb/front
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8

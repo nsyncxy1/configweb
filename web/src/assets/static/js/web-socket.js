@@ -10,7 +10,7 @@ WebSocketClient.prototype.getWebSocketUrl = function () {
     if (window.location.protocol === 'https:') {
         protocol = 'wss://';
     }
-    return protocol + window.location.host + '/shell';
+    return protocol + window.location.host + process.env.VUE_APP_BASE_API +'/shell';
 }
 /**
  * 连接WebSocket

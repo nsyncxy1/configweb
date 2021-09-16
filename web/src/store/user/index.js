@@ -23,35 +23,38 @@ const user = {
     },
     actions:{
         async loginUser({commit},payload){
-            //console.log('loginUser:')
+            console.log('loginUser:')
             //console.log(payload)
-            const res= await loginApi.loginUser(payload)
-            console.log("res:")
-            console.log(res)
-            if(res.code && res.code == 200)
-            {
-                commit('SET_TOKEN',res.data.token)
-                //console.log(getToken())
-                Message.success({
-                    message:res.msg,
-                    duration:1000
-                })
-                router.push({path:'/dash'})
-            }
-            else if(res.code && res.code == 201)
-            {
-                Message.error({
-                    message:res.msg,
-                    duration:1800
-                })
-                return false
-            }else {
-                Message.error({
-                    message:res.msg,
-                    duration:1800
-                })
-                return false
-            }
+            // const res= await loginApi.loginUser(payload)
+            loginApi.loginUser(payload).then(res => {
+                console.log("res:")
+                console.log(res)
+                if(res.code && res.code == 200)
+                {
+                    commit('SET_TOKEN',res.data.token)
+                    //console.log(getToken())
+                    Message.success({
+                        message:res.msg,
+                        duration:1000
+                    })
+                    router.push({path:'/dash'})
+                }
+                else if(res.code && res.code == 201)
+                {
+                    Message.error({
+                        message:res.msg,
+                        duration:1800
+                    })
+                    return false
+                }else {
+                    Message.error({
+                        message:res.msg,
+                        duration:1800
+                    })
+                    return false
+                }
+            });
+
         },
         async exitUser({commit}){
             /*const resData = await loginApi.exitUser()
