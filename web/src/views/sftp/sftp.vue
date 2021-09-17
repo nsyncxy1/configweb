@@ -46,7 +46,8 @@
         name: "sftp",
         data(){
             return {
-                api:process.env["VUE_APP_BASE_API"]
+                api:process.env["VUE_APP_BASE_API"],
+                sessionId:null
             }
         },
         mounted(){
@@ -58,6 +59,7 @@
         methods:{
             async init(){
                 const _this = this;
+                _this.sessionId = localStorage.getItem('sessionId')
                 /*const params = JSON.parse(localStorage.getItem('loginParams'))
                 console.log(params)
                 // eslint-disable-next-line no-unused-vars
@@ -68,7 +70,7 @@
                 $("#file").change(function () {
                     console.log('#file:')
                     if($(this).val() !== ""){
-                        uploadFile(_this.api);
+                        uploadFile(_this.api,_this.sessionId);
                     }
                 })
                 let $fileTree = $('#file_tree');
@@ -95,7 +97,7 @@
                             $.ajax({
                                 url : _this.api + "/sftp/getFileTree",
                                 dataType : "json",
-                                data: { path: '/' },
+                                data: { path: '/',sessionId:_this.sessionId },
                                 type : "get",
                                 beforeSend: function(request) {
                                     request.setRequestHeader("Authorization",getToken());
@@ -184,7 +186,23 @@
                         let file = tree.get_node(val)
                         // 双击 除文件夹外都下载
                         if (file && "jstree-folder" !== file.icon) {
-                            window.open(window.location.origin + "/sftp/download?path=" + val, '_blank')
+                            //console.log(window.location.origin + _this.api +"/#/sftp/download?path=" + val)
+                            //window.open(window.location.origin + _this.api +"/sftp/download?path=" + val +'&sessionId='+_this.sessionId, '_blank')
+                            $.ajax({
+                                url:_this.api + "/sftp/download",
+                                type:'get',
+                                dataType : "json",
+                                data:{
+                                    path:val,
+                                    sessionId:_this.sessionId
+                                },
+                                beforeSend: function(request) {
+                                    request.setRequestHeader("Authorization",getToken());
+                                },
+                                success:function (res) {
+                                    console.log(res)
+                                }
+                            })
                         }
                     });
 
@@ -198,7 +216,7 @@
                                 url : _this.api + "/sftp",
                                 type : "delete",
                                 dataType : "json",
-                                data: { path: val },
+                                data: { path: val,sessionId:_this.sessionId},
                                 beforeSend: function(request) {
                                     request.setRequestHeader("Authorization",getToken());
                                 },
@@ -222,7 +240,7 @@
                     $.ajax({
                         url : _this.api + "/sftp/getFileTree",
                         dataType : "json",
-                        data: { 'path': selectedNode.id },
+                        data: { 'path': selectedNode.id,sessionId:_this.sessionId },
                         type : "get",
                         beforeSend: function(request) {
                             request.setRequestHeader("Authorization",getToken());

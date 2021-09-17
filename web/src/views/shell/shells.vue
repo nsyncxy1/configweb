@@ -200,12 +200,17 @@
                     params:this.loginParams
                 }
                 // eslint-disable-next-line no-unused-vars
-                documentApi.getSftp(params).then(result => {
-                    //localStorage.setItem('loginParams',JSON.stringify(params))
-                    this.loginParams.operate = 'sftp'
-                    const host = window.location.origin
-                    window.open( host+this.api+'/#/sftp?params=' + encodeURIComponent(JSON.stringify(this.loginParams)))
-                })
+                documentApi.getSftp(params).then(response => {
+                    const res = response.data
+                    if(res.code === 200)
+                    {
+                        localStorage.setItem('sessionId',res.data)
+                        //localStorage.setItem('loginParams',JSON.stringify(params))
+                        this.loginParams.operate = 'sftp'
+                        const host = window.location.origin
+                        window.open( host+this.api+'/#/sftp?params=' + encodeURIComponent(JSON.stringify(this.loginParams)))
+                    }
+                 })
             },
             // 内容全屏显示-窗口大小发生改变时
             resizeScreen(size) {
