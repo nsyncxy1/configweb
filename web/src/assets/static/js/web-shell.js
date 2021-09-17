@@ -37,7 +37,7 @@ export function uploadFile() {
     //获取form数据
     let formData = new FormData(document.querySelector("#upload_form"));
     $.ajax({
-        url: "/sftp/upload",
+        url: "/webshell/sftp/upload",
         type: "POST",
         data: formData,
         processData: false,  // 不处理数据
