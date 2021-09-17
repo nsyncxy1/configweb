@@ -15,6 +15,8 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -36,6 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 @Service
+@EnableScheduling
 public class WebShellService {
 	/** 存放ssh连接信息的map */
 	private static final Map<String, Object> SSH_MAP = new ConcurrentHashMap<>();
@@ -134,7 +137,7 @@ public class WebShellService {
 		//设置密码
 		session.setPassword(SecretUtils.decrypt(sshData.getPassword(), SecretUtils.AES_KEY));
 		//连接超时时间30s
-		session.connect(600000);
+		session.connect(60000);
 
 		//开启shell通道
 		Channel channel = session.openChannel("shell");
@@ -194,4 +197,17 @@ public class WebShellService {
 			}
 		}
 	}
+
+	@Scheduled(fixedRate = 50000)
+	public void taskSend() {
+		if (SSH_MAP.size() > 0) {
+			for (Object value : SSH_MAP.values()) {
+				ShellConnectInfo shellConnectInfo = (ShellConnectInfo) value;
+				WebSocketSession webSocketSession = shellConnectInfo.getWebSocketSession();
+				sendMessage(webSocketSession, "".getBytes());
+			}
+		}
+	}
+
+
 }
