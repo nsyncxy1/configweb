@@ -24,7 +24,7 @@ export function showTips(msg) {
     $("#message_console").html(new Date().toLocaleTimeString() + "：" + msg);
 }
 // eslint-disable-next-line no-unused-vars
-export function uploadFile() {
+export function uploadFile(api) {
     let val = $('#current_path').val();
     // 设置上传路径
     $("#path").val(val);
@@ -37,7 +37,7 @@ export function uploadFile() {
     //获取form数据
     let formData = new FormData(document.querySelector("#upload_form"));
     $.ajax({
-        url: "/sftp/upload",
+        url: api + "/sftp/upload",
         type: "POST",
         data: formData,
         processData: false,  // 不处理数据

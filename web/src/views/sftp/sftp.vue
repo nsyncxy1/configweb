@@ -38,14 +38,15 @@
     //import '@/assets/static/js/jquery-3.5.1.min'
     import '@/assets/static/js/web-socket'
     import {uploadFile,checkErr,showTips,refreshTree} from '@/assets/static/js/web-shell'
-    import '@/assets/static/js/jstree'
+    import '@/assets/static/js/dkTree'
+    //import '@/assets/static/js/themes/default/style.min.css'
     // eslint-disable-next-line no-unused-vars
     import documentApi from "@/api/documentApi";
     export default {
         name: "sftp",
         data(){
             return {
-
+                api:process.env["VUE_APP_BASE_API"]
             }
         },
         mounted(){
@@ -67,61 +68,14 @@
                 $("#file").change(function () {
                     console.log('#file:')
                     if($(this).val() !== ""){
-                        uploadFile();
+                        uploadFile(_this.api);
                     }
                 })
                 let $fileTree = $('#file_tree');
                 let $currentPathInput = $("#current_path");
                 // 根目录
                 let rootDirectory = { "id": "/", "parent": "#", "text": "/", "icon": "jstree-folder", 'state': { 'opened': true }}
-                function init(){
-                    console.log('init:')
-                    console.log(getToken())
-                    $.ajax({
-                        url: "/sftp/getFileTree",
-                        dataType: "json",
-                        data: {path: '/'},
-                        type: "get",
-                        beforeSend: function (request) {
-                            request.setRequestHeader("Authorization", getToken());
-                        },
-                        success: function (res) {
-                            checkErr(res)
-                            console.log(res)
-                            let fileTree = res.data
-                            if (fileTree) {
-                                loadTableData(fileTree);
-                                fileTree.unshift(rootDirectory)
-                                //callback.call(this, fileTree);
-                                $fileTree.on("changed.jstree", function (e, data) {
-                                    console.log('changedJstree:')
-                                    if(data.selected.length) {
-                                        let selected = data.instance.get_node(data.selected[0])
-                                        console.log('The selected node is: ' + selected.id);
-                                        $currentPathInput.val(selected.id)
-                                        // 只查询文件夹的下一级文件
-                                        if ("jstree-folder" === selected.icon) {
-                                            getFileTree(data.instance, selected)
-                                        }
-                                    }
-                                }).jstree({
-                                    "multiple" : false,
-                                    'check_callback': true,
-                                    'data':fileTree
-                                })
-                            } else {
-                                showTips("暂无数据！");
-                                $(".file-detail-table .data-cell").remove();
-                            }
-                        },
-                        error: function (xml, err) {
-                            console.log(xml, err)
-                            _this.$message.error('接口访问异常');
-                        }
-                    })
-                }
-                init()
-                /*$fileTree.on("changed.jstree", function (e, data) {
+                $fileTree.on("changed.jstree", function (e, data) {
                     console.log('changedJstree:')
                     if(data.selected.length) {
                         let selected = data.instance.get_node(data.selected[0])
@@ -139,7 +93,7 @@
                         'data' : function (obj, callback){
                             console.log(getToken())
                             $.ajax({
-                                url : "/sftp/getFileTree",
+                                url : _this.api + "/sftp/getFileTree",
                                 dataType : "json",
                                 data: { path: '/' },
                                 type : "get",
@@ -147,272 +101,6 @@
                                     request.setRequestHeader("Authorization",getToken());
                                 },
                                 success : function(res) {
-                                    /!*res = {
-                                        "code":200,
-                                        "msg":"OK",
-                                        "data":[
-                                            {
-                                                "id":"/boot",
-                                                "parent":"/",
-                                                "text":"boot",
-                                                "icon":"jstree-folder",
-                                                "fileType":"目录",
-                                                "fileAttr":"r-xr-xr-x",
-                                                "numberOfDir":"5",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"4.0KB",
-                                                "modifiedDate":"Aug 31 10:43"
-                                            },
-                                            {
-                                                "id":"/dev",
-                                                "parent":"/",
-                                                "text":"dev",
-                                                "icon":"jstree-folder",
-                                                "fileType":"目录",
-                                                "fileAttr":"rwxr-xr-x",
-                                                "numberOfDir":"19",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"2.9KB",
-                                                "modifiedDate":"May 24 09:39"
-                                            },
-                                            {
-                                                "id":"/etc",
-                                                "parent":"/",
-                                                "text":"etc",
-                                                "icon":"jstree-folder",
-                                                "fileType":"目录",
-                                                "fileAttr":"rwxr-xr-x",
-                                                "numberOfDir":"83",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"4.0KB",
-                                                "modifiedDate":"Sep  8 15:59"
-                                            },
-                                            {
-                                                "id":"/home",
-                                                "parent":"/",
-                                                "text":"home",
-                                                "icon":"jstree-folder",
-                                                "fileType":"目录",
-                                                "fileAttr":"rwxr-xr-x",
-                                                "numberOfDir":"3",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"4.0KB",
-                                                "modifiedDate":"Aug 31 10:50"
-                                            },
-                                            {
-                                                "id":"/lost+found",
-                                                "parent":"/",
-                                                "text":"lost+found",
-                                                "icon":"jstree-folder",
-                                                "fileType":"目录",
-                                                "fileAttr":"rwx------",
-                                                "numberOfDir":"2",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"16.0KB",
-                                                "modifiedDate":"Jul 11  2019"
-                                            },
-                                            {
-                                                "id":"/media",
-                                                "parent":"/",
-                                                "text":"media",
-                                                "icon":"jstree-folder",
-                                                "fileType":"目录",
-                                                "fileAttr":"rwxr-xr-x",
-                                                "numberOfDir":"2",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"4.0KB",
-                                                "modifiedDate":"Apr 11  2018"
-                                            },
-                                            {
-                                                "id":"/mnt",
-                                                "parent":"/",
-                                                "text":"mnt",
-                                                "icon":"jstree-folder",
-                                                "fileType":"目录",
-                                                "fileAttr":"rwxr-xr-x",
-                                                "numberOfDir":"2",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"4.0KB",
-                                                "modifiedDate":"Apr 11  2018"
-                                            },
-                                            {
-                                                "id":"/opt",
-                                                "parent":"/",
-                                                "text":"opt",
-                                                "icon":"jstree-folder",
-                                                "fileType":"目录",
-                                                "fileAttr":"rwxr-xr-x",
-                                                "numberOfDir":"5",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"4.0KB",
-                                                "modifiedDate":"Sep 10 17:05"
-                                            },
-                                            {
-                                                "id":"/proc",
-                                                "parent":"/",
-                                                "text":"proc",
-                                                "icon":"jstree-folder",
-                                                "fileType":"目录",
-                                                "fileAttr":"r-xr-xr-x",
-                                                "numberOfDir":"131",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"0B",
-                                                "modifiedDate":"May 24 09:37"
-                                            },
-                                            {
-                                                "id":"/root",
-                                                "parent":"/",
-                                                "text":"root",
-                                                "icon":"jstree-folder",
-                                                "fileType":"目录",
-                                                "fileAttr":"r-xr-x---",
-                                                "numberOfDir":"12",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"4.0KB",
-                                                "modifiedDate":"Sep 15 09:53"
-                                            },
-                                            {
-                                                "id":"/run",
-                                                "parent":"/",
-                                                "text":"run",
-                                                "icon":"jstree-folder",
-                                                "fileType":"目录",
-                                                "fileAttr":"rwxr-xr-x",
-                                                "numberOfDir":"27",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"820B",
-                                                "modifiedDate":"Sep  8 18:07"
-                                            },
-                                            {
-                                                "id":"/srv",
-                                                "parent":"/",
-                                                "text":"srv",
-                                                "icon":"jstree-folder",
-                                                "fileType":"目录",
-                                                "fileAttr":"rwxr-xr-x",
-                                                "numberOfDir":"2",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"4.0KB",
-                                                "modifiedDate":"Apr 11  2018"
-                                            },
-                                            {
-                                                "id":"/sys",
-                                                "parent":"/",
-                                                "text":"sys",
-                                                "icon":"jstree-folder",
-                                                "fileType":"目录",
-                                                "fileAttr":"r-xr-xr-x",
-                                                "numberOfDir":"13",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"0B",
-                                                "modifiedDate":"May 24 17:37"
-                                            },
-                                            {
-                                                "id":"/tmp",
-                                                "parent":"/",
-                                                "text":"tmp",
-                                                "icon":"jstree-folder",
-                                                "fileType":null,
-                                                "fileAttr":null,
-                                                "numberOfDir":null,
-                                                "owner":null,
-                                                "group":null,
-                                                "size":null,
-                                                "modifiedDate":null
-                                            },
-                                            {
-                                                "id":"/usr",
-                                                "parent":"/",
-                                                "text":"usr",
-                                                "icon":"jstree-folder",
-                                                "fileType":"目录",
-                                                "fileAttr":"rwxr-xr-x",
-                                                "numberOfDir":"13",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"4.0KB",
-                                                "modifiedDate":"Jul 11  2019"
-                                            },
-                                            {
-                                                "id":"/var",
-                                                "parent":"/",
-                                                "text":"var",
-                                                "icon":"jstree-folder",
-                                                "fileType":"目录",
-                                                "fileAttr":"rwxr-xr-x",
-                                                "numberOfDir":"19",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"4.0KB",
-                                                "modifiedDate":"Jul 11  2019"
-                                            },
-                                            {
-                                                "id":"/bin",
-                                                "parent":"/",
-                                                "text":"bin",
-                                                "icon":"/static/img/l.png",
-                                                "fileType":"链接文件",
-                                                "fileAttr":"rwxrwxrwx",
-                                                "numberOfDir":"1",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"7B",
-                                                "modifiedDate":"Jul 11  2019"
-                                            },
-                                            {
-                                                "id":"/lib",
-                                                "parent":"/",
-                                                "text":"lib",
-                                                "icon":"/static/img/l.png",
-                                                "fileType":"链接文件",
-                                                "fileAttr":"rwxrwxrwx",
-                                                "numberOfDir":"1",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"7B",
-                                                "modifiedDate":"Jul 11  2019"
-                                            },
-                                            {
-                                                "id":"/lib64",
-                                                "parent":"/",
-                                                "text":"lib64",
-                                                "icon":"/static/img/l.png",
-                                                "fileType":"链接文件",
-                                                "fileAttr":"rwxrwxrwx",
-                                                "numberOfDir":"1",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"9B",
-                                                "modifiedDate":"Jul 11  2019"
-                                            },
-                                            {
-                                                "id":"/sbin",
-                                                "parent":"/",
-                                                "text":"sbin",
-                                                "icon":"/static/img/l.png",
-                                                "fileType":"链接文件",
-                                                "fileAttr":"rwxrwxrwx",
-                                                "numberOfDir":"1",
-                                                "owner":"root",
-                                                "group":"root",
-                                                "size":"8B",
-                                                "modifiedDate":"Jul 11  2019"
-                                            }
-                                        ]
-                                    }*!/
                                     checkErr(res)
                                     console.log(res)
                                     let fileTree = res.data
@@ -424,7 +112,6 @@
                                         callback.call(this, fileTree);
                                         console.log('callback:')
                                         console.log(callback)
-                                        return fileTree
                                     }else{
                                         showTips("暂无数据！");
                                         $(".file-detail-table .data-cell").remove();
@@ -441,7 +128,7 @@
                         "keep_selected_style" : false
                     },
                     "plugins" : [ "checkbox" ]
-                });*/
+                });
                 function loadTableData(data) {
                     console.log('loadTableData:')
                     let fileDetail = "";
@@ -508,7 +195,7 @@
                         if(window.confirm('你确定要删除“' + val + '”吗？')){
                             console.log(getToken())
                             $.ajax({
-                                url : "/sftp",
+                                url : _this.api + "/sftp",
                                 type : "delete",
                                 dataType : "json",
                                 data: { path: val },
@@ -528,11 +215,12 @@
                         }
                     });
                 }
+                // eslint-disable-next-line no-unused-vars
                 function getFileTree(instance, selectedNode) {
                     console.log('getFileTree:')
                     console.log(getToken())
                     $.ajax({
-                        url : "/sftp/getFileTree",
+                        url : _this.api + "/sftp/getFileTree",
                         dataType : "json",
                         data: { 'path': selectedNode.id },
                         type : "get",

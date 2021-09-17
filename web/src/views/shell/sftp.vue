@@ -37,7 +37,7 @@
     //import $ from '../../assets/static/js/jquery-3.5.1.min'
     import '@/assets/static/js/web-socket'
     import {uploadFile,checkErr,showTips,refreshTree} from '@/assets/static/js/web-shell'
-    import '@/assets/static/js/jstree.min'
+    import '@/assets/static/js/dkTree'
     // eslint-disable-next-line no-unused-vars
     import documentApi from "@/api/documentApi";
     export default {

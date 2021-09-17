@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from "@/router"
 import store from "@/store"
 import '@/utils/permission'
-//import '@/assets/static/js/web-socket.js'
 //import '@/styles/reset.scss'
 import 'normalize.css/normalize.css'
 import ElementUI from 'element-ui';
