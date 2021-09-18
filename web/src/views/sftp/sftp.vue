@@ -46,7 +46,8 @@
         name: "sftp",
         data(){
             return {
-                api:process.env["VUE_APP_BASE_API"]
+                api:process.env["VUE_APP_BASE_API"],
+                sessionId:null
             }
         },
         mounted(){
@@ -58,6 +59,7 @@
         methods:{
             async init(){
                 const _this = this;
+                _this.sessionId = localStorage.getItem('sessionId')
                 /*const params = JSON.parse(localStorage.getItem('loginParams'))
                 console.log(params)
                 // eslint-disable-next-line no-unused-vars
@@ -68,7 +70,7 @@
                 $("#file").change(function () {
                     console.log('#file:')
                     if($(this).val() !== ""){
-                        uploadFile(_this.api);
+                        uploadFile(_this.api,_this.sessionId);
                     }
                 })
                 let $fileTree = $('#file_tree');
@@ -95,7 +97,7 @@
                             $.ajax({
                                 url : _this.api + "/sftp/getFileTree",
                                 dataType : "json",
-                                data: { path: '/' },
+                                data: { path: '/',sessionId:_this.sessionId },
                                 type : "get",
                                 beforeSend: function(request) {
                                     request.setRequestHeader("Authorization",getToken());
@@ -184,10 +186,54 @@
                         let file = tree.get_node(val)
                         // 双击 除文件夹外都下载
                         if (file && "jstree-folder" !== file.icon) {
-                            window.open(window.location.origin + "/sftp/download?path=" + val, '_blank')
+                            //console.log(window.location.origin + _this.api +"/#/sftp/download?path=" + val)
+                            //window.open(window.location.origin + _this.api +"/sftp/download?path=" + val +'&sessionId='+_this.sessionId, '_blank')
+                           /* $.ajax({
+                                url:_this.api + "/sftp/download",
+                                type:'get',
+                                dataType : "json",
+                                data:{
+                                    path:val,
+                                    sessionId:_this.sessionId
+                                },
+                                beforeSend: function(request) {
+                                    request.setRequestHeader("Authorization",getToken());
+                                },
+                                success:function (res) {
+                                    console.log(res)
+                                }
+                            })*/
+                            function createObjectURL(object) {
+                                return (window.URL) ? window.URL.createObjectURL(object) : window.webkitURL.createObjectURL(object);
+                            }
+                            const xhr = new XMLHttpRequest();
+                            const formData = new FormData();
+                            xhr.open('get',_this.api + "/sftp/download?path=" + val +'&sessionId='+_this.sessionId);  //url填写后台的接口地址，如果是post，在formData append参数（参考原文地址）
+                            xhr.setRequestHeader("Authorization", getToken());
+                            xhr.responseType = 'blob';
+                            xhr.onload = function (e) {
+                                if (this.status == 200) {
+                                    let blob = this.response;
+                                    const index = val.lastIndexOf('/') >= 0 ? val.lastIndexOf('/') : 0
+                                    const filename = val.substring(index+1)
+                                    console.log(this.response)
+                                    if (window.navigator.msSaveOrOpenBlob) {
+                                        navigator.msSaveBlob(blob, filename);
+                                    } else {
+                                        let a = document.createElement('a');
+                                        let url = createObjectURL(blob);
+                                        a.href = url;
+                                        a.download = filename;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        window.URL.revokeObjectURL(url);
+                                        document.body.removeChild(a)
+                                    }
+                                }
+                            };
+                            xhr.send(formData);
                         }
                     });
-
                     // 删除数据
                     $('.delete-data').bind('click', function() {
                         console.log('delete:')
@@ -198,7 +244,7 @@
                                 url : _this.api + "/sftp",
                                 type : "delete",
                                 dataType : "json",
-                                data: { path: val },
+                                data: { path: val,sessionId:_this.sessionId},
                                 beforeSend: function(request) {
                                     request.setRequestHeader("Authorization",getToken());
                                 },
@@ -222,7 +268,7 @@
                     $.ajax({
                         url : _this.api + "/sftp/getFileTree",
                         dataType : "json",
-                        data: { 'path': selectedNode.id },
+                        data: { 'path': selectedNode.id,sessionId:_this.sessionId },
                         type : "get",
                         beforeSend: function(request) {
                             request.setRequestHeader("Authorization",getToken());
