@@ -17,19 +17,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @title WebMvcConfig
  * @date 2021/3/6 19:49
  */
-@Configuration
+/*@Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 	@Autowired
 	private CorsConfig corsConfig;
 
-	/**
+	*//**
 	 * 跨站资源共享配置
 	 * Cross Origin Resourse-Sharing - 跨站资源共享
 	 *
 	 * @param registry CorsRegistry
 	 * @author zmzhou
 	 * @since 2021/8/22 18:46
-	 */
+	 *//*
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		// Add more mappings... 可以添加多个mapping
@@ -45,4 +45,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
 				// 设置允许跨域请求的域名
 				.allowedOriginPatterns(corsConfig.getAllowedOriginPatterns());
 	}
-}
+}*/

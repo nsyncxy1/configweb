@@ -200,6 +200,7 @@ public class WebShellService {
 
 	@Scheduled(fixedRate = 50000)
 	public void taskSend() {
+//		System.out.println("keep heart beat...");
 		if (SSH_MAP.size() > 0) {
 			for (Object value : SSH_MAP.values()) {
 				ShellConnectInfo shellConnectInfo = (ShellConnectInfo) value;

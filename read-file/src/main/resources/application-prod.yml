@@ -1,11 +1,11 @@
 
 dakai:
   paths:
-    - /opt/configweb/testdir
+    - /opt/xnm
     - /etc/nginx
   user:
-    admin: 123
-    test: 456
+    admin: Abc123..
+    test: Dktec.cn@2021
   token: 735f517922334b41868d0f32fd239617
   uploadPath: /opt/xnm/upload
 
@@ -36,9 +36,9 @@ spring:
     restart:
       # 热部署重启开关，不重启实现快速热部署
       enabled: false
-  web:
-    resources:
-      static-locations: file:/opt/xnm/configweb/front
+#  web:
+#    resources:
+#      static-locations: file:/opt/xnm/configweb/front
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -58,5 +58,13 @@ logging:
     web: INFO
     com.github.zmzhoustar: INFO
     org.springframework: INFO
-logstash:
-  address: 192.168.163.132:4567
+# 批量导入,一批大小
+insert:
+  batch:
+    size: 400
+  # 批量导入，线程池大小
+  thread:
+    size: 4
+
+feedback:
+  location: /opt/xnm/configweb/feedback/

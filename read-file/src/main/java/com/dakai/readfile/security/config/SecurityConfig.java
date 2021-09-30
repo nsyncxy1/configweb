@@ -16,14 +16,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 /**
  * spring security配置
- * 
+ *
  * @author ruoyi
  */
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
 
-    
+
     /**
      * 认证失败处理类
      */
@@ -119,7 +119,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 //        httpSecurity.addFilterBefore(corsFilter, LogoutFilter.class);
     }
 
-    
+
     /**
      * 强散列哈希加密实现
      */

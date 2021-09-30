@@ -38,9 +38,9 @@ spring:
     restart:
       # 热部署重启开关，不重启实现快速热部署
       enabled: false
-#  web:
-#    resources:
-#      static-locations: file:D:/webshell
+  web:
+    resources:
+      static-locations: file:D:/webshell
 
 #  web:
 #    resources:
@@ -67,10 +67,18 @@ spring:
 # 日志配置
 logging:
   config: classpath:log4j2.xml
-  #  config: classpath:logback-spring.xml
+  #config: classpath:logback-spring.xml
   level:
     web: INFO
     com.github.zmzhoustar: INFO
     org.springframework: INFO
-logstash:
-  address: 192.168.163.132:4567
+# 批量导入,一批大小
+insert:
+  batch:
+    size: 400
+  # 批量导入，线程池大小
+  thread:
+    size: 4
+
+feedback:
+  location: D:/feedback/
