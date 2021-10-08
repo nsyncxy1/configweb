@@ -2,7 +2,7 @@
 .idea
 node_modules
 /dist
-
+/src/views/db
 
 
 
@@ -25,3 +25,18 @@ pnpm-debug.log*
 *.sln
 *.sw?
 src/config/
+src/model/
+src/styles/db.css
+src/user/
+src/utils/AjaxUtil.js
+src/utils/CodeUtil.js
+src/utils/CookieUtil.js
+src/utils/LoadingUtil.js
+src/utils/Md5Util.js
+src/utils/NavigatorUtil.js
+src/utils/NumberUtil.js
+src/utils/ResultUtil.js
+src/utils/StringUtil.js
+src/utils/TextareaUtil.js
+src/utils/init.js
+src/views/db/

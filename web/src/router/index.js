@@ -11,6 +11,11 @@ const shells = () => import('@/views/shell/shells')
 const sftp = () => import('@/views/shell/sftp')
 const sftps = () => import('@/views/sftp/sftp')
 const shellDemo = () => import('@/views/shell/shellDemo')
+const dbIndex = () => import('@/views/db/dbIndex')
+const Main = () => import('@/views/db/Main')
+const DBLogin = () => import('@/views/db/Login')
+const IssuePublish = () => import('@/views/db/feedback/index')
+const UserUseing = () => import('@/views/db/setting/UserUseing')
 /*const userIndex = () => import('@/views/userInfo/userIndex')
 const userInfo = () => import('@/views/userInfo/userInfo')
 const userConfig = () => import('@/views/userInfo/userConfig')
@@ -202,6 +207,37 @@ const constantRoutes = [
                     }
                 ]
             },*/
+        ]
+    },
+    {
+        path: '/dbIndex',
+        name: 'dbIndex',
+        redirect: '/dbIndex/DBLogin',
+        component:dbIndex,
+        meta: {
+            title: '数据库管理平台'
+        },
+        children: [
+            {
+                path: 'DBLogin',
+                name: 'DBLogin',
+                component: DBLogin
+            },
+            {
+                path: 'main',
+                name: 'Main',
+                component: Main
+            },
+            {
+                path: 'feedback',
+                name: 'feedback',
+                component: IssuePublish
+            },
+            {
+                path: 'userStatistic',
+                name: 'userStatistic',
+                component: UserUseing
+            }
         ]
     },
     {

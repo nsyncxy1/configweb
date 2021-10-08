@@ -79,6 +79,9 @@
             <el-form-item>
                 <el-button type="primary" @click="handleShells">进入Shell</el-button>
             </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="handleDB">进入数据库管理平台</el-button>
+            </el-form-item>
         </el-form>
         <el-table v-loading="loading" :data="listData"
                   row-key="path" :tree-props="treeProp"
@@ -300,6 +303,11 @@
                 window.open(url,'_blank')*/
                 const url = window.location.origin
                 window.location.href = url + this.api +'/?#/shellIndex/shells'
+            },
+            handleDB(){
+                this.$router.push({
+                    name:'dbIndex'
+                })
             },
             submitUpload() {
                 console.log('submitUploads:')
