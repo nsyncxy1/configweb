@@ -1,3 +1,4 @@
+import {Base64} from "js-base64";
 export function formatTime(time) {
     let date = new Date(time)
     date = `${date.getFullYear()}-(${date.getMonth()+1})-${date.getDay()}`
@@ -21,5 +22,21 @@ export function getFileName(value){
         return postfix
     }else {
         return false
+    }
+}
+// 生成随机字母
+export function randomCoding(){
+    let ranNum = Math.ceil(Math.random() * 25);
+    return String.fromCharCode(65+ranNum)
+}
+export function handleSqlBase64(sql) {
+    let str = sql
+    if(str)
+    {
+        str = randomCoding() + Base64.encode(str)
+        str = Base64.encode(str)
+        return str
+    }else {
+        console.log('sql is empty!!!')
     }
 }

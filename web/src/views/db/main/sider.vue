@@ -57,6 +57,7 @@
     import ResultUtil from '@/utils/ResultUtil';
     import loginHandler from '../login/handler';
     import ElButton from "../../../../node_modules/element-ui/packages/button/src/button.vue";
+    import {handleSqlBase64} from "@/utils/format";
 
     // table 查询sql
     const tableSql = entity.tableSql;
@@ -77,7 +78,7 @@
         let tableTreeArr = [];
 
         let that = this;
-        AjaxUtil.get(entity.tableUrl[currentDb], {sql: tableSql[currentDb]}).then((data) => {
+        AjaxUtil.get(entity.tableUrl[currentDb], {sql: handleSqlBase64(tableSql[currentDb])}).then((data) => {
           ResultUtil.handle(data, () => {
             let arr = handler.produceTables(data, currentDb);
             for(let i=0; i<arr.length; i++){
@@ -187,7 +188,7 @@
           // 设置 table
           let that = this;
           that.tableLoading = true;
-          AjaxUtil.get(entity.tableUrl[this.currentDb], {sql: tableSql[this.currentDb]}).then((data) => {
+          AjaxUtil.get(entity.tableUrl[this.currentDb], {sql: handleSqlBase64(tableSql[this.currentDb])}).then((data) => {
             //console.log(data);
             that.tableLoading = false;
             ResultUtil.handle(data, () => {
@@ -216,7 +217,7 @@
           }
           if (node.level === 1){
             let that = this;
-            AjaxUtil.get('sql/execute', {sql: tableSql[this.currentDb]}).then((data) => {
+            AjaxUtil.get('sql/execute', {sql: handleSqlBase64(tableSql[this.currentDb])}).then((data) => {
               //console.log(data);
               ResultUtil.handle(data, () => {
                 let d = handler.produceTables(data);
@@ -247,7 +248,7 @@
           let that = this;
           if(typeof query === 'function'){
             this.$emit('start-get-data', true);
-            AjaxUtil.get('sql/execute', {sql: query(data.tableName)}).then((data) => {
+            AjaxUtil.get('sql/execute', {sql: handleSqlBase64(query(data.tableName))}).then((data) => {
               //console.log(data);
               that.$emit('start-get-data', false);
               that.$emit('get-data', data);
@@ -260,7 +261,7 @@
           // 查询表信息
           if(data.type){
             if (data.type === 'tableStructure' && typeof tableInfo === 'function'){
-              AjaxUtil.get('sql/execute', {sql: tableInfo(data.tableName)}).then((data) => {
+              AjaxUtil.get('sql/execute', {sql: handleSqlBase64(tableInfo(data.tableName))}).then((data) => {
                 //console.log(data);
                 let result = data.result;
                 if(result.headers instanceof Array

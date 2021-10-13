@@ -110,7 +110,8 @@
     import ExcelDialog from './importData/excelDialog';
     import ExcelDialogProgress from './importData/progress';
     import ErrorDetail from './importData/errorDetail';
-
+    import {Base64} from 'js-base64'
+    import {randomCoding} from "@/utils/format";
     export default {
       name: "main-header",
       data(){
@@ -215,6 +216,8 @@
           if(selectSql.length > 0){   // 当有鼠标选择的内容时，则使用鼠标选中的内容
             sql = selectSql;
           }
+          sql = randomCoding() + Base64.encode(sql)
+          sql = Base64.encode(sql)
           data.sql = sql;
           return data;
         },

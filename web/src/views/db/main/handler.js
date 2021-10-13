@@ -7,6 +7,7 @@ import entity from './configs';
 import AjaxUtil from '@/utils/AjaxUtil';
 import user from '@/user';
 import $ from 'jquery';
+import {handleSqlBase64} from "@/utils/format";
 
 // 计算所有表
 const produceTables = (result, dbType) => {
@@ -57,7 +58,7 @@ const produceTableOption = (node) => {
 // 获取mysql oracle 等关系型数据库，可以通过sql查询的
 function _getDataBases(dbType) {
   return new Promise((resolve, reject) => {
-    AjaxUtil.get('sql/execute', {sql: entity.allDatabases[dbType]}).then((data) => {
+    AjaxUtil.get('sql/execute', {sql: handleSqlBase64(entity.allDatabases[dbType])}).then((data) => {
       if(data.result.headers instanceof Array && data.result.headers.length > 0){
         let field = data.result.headers[0];
         let arr = [];
