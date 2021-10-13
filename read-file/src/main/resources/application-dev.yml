@@ -38,9 +38,9 @@ spring:
     restart:
       # 热部署重启开关，不重启实现快速热部署
       enabled: false
-  web:
-    resources:
-      static-locations: file:D:/webshell
+#  web:
+#    resources:
+#      static-locations: file:D:/webshell
 
 #  web:
 #    resources:

@@ -11,7 +11,7 @@
              ref="myForm"
              @keyup.enter.native="connect"
     >
-      <el-form-item label="Ip地址：" prop="host">
+      <el-form-item label="Ip地址：" prop="host" >
         <!--
         <el-input v-model="formData.host"></el-input>
         -->
@@ -226,11 +226,17 @@ export default {
     // 过滤表单
     filterFormData () {
       let data = {}
-      data.port = this.formData.port
-      data.password = this.formData.password
-      data.host = this.formData.host ? this.formData.host.trim() : this.formData.host
-      data.name = this.formData.name ? this.formData.name.trim() : this.formData.name
-      data.userName = this.formData.userName ? this.formData.userName.trim() : this.formData.userName
+        data.port = this.formData.port
+        data.password = this.formData.password
+        data.host = this.formData.host ? this.formData.host.trim() : this.formData.host
+        data.name = this.formData.name ? this.formData.name.trim() : this.formData.name
+        data.userName = this.formData.userName ? this.formData.userName.trim() : this.formData.userName
+      console.log(data);
+      localStorage.setItem("port",data.port)
+      localStorage.setItem("name",data.name)
+      localStorage.setItem("host",data.host)
+      localStorage.setItem("userName",data.userName)
+      localStorage.setItem("password",data.password)
       return data
     },
     close () {
@@ -240,11 +246,27 @@ export default {
     open (data) {
       this.visible = true
       // 初始化表单数据
-      this.formData.port = data.port
-      this.formData.name = data.name
-      this.formData.host = undefined
-      this.formData.userName = undefined
-      this.formData.password = undefined
+
+      let port = localStorage.getItem("port");
+      let name = localStorage.getItem("name");
+      let host = localStorage.getItem("host");
+      let userName = localStorage.getItem("userName")
+      let password = localStorage.getItem("password")
+      console.log(name);
+      console.log(port);
+      if (port){
+        this.formData.port = Number(port)
+        this.formData.name = name
+        this.formData.host = host
+        this.formData.userName = userName
+        this.formData.password = password
+      }else{
+        this.formData.port = data.port
+        this.formData.name = data.name
+        this.formData.host = undefined
+        this.formData.userName = undefined
+        this.formData.password = undefined
+      }
       this.rules = entity.getRules(data)
     },
     resetFrom () { // 重置表单

@@ -39,7 +39,7 @@ public class SqlExecuteController {
 
 	/**
 	 * 查询
-	 * @param sql
+	 * @param param
 	 * @return
 	 */
 	@GetMapping("/execute")
