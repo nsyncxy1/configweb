@@ -30,7 +30,7 @@ server:
 # Spring配置
 spring:
   application:
-    name: @project.name@
+    name: readfile
   # 服务模块
   devtools:
     restart:
