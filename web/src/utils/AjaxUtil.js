@@ -128,7 +128,7 @@ function handleOptions(options, _options){
 
 //处理url
 function handleUrl(options) {
-  return restRoot + options.url;
+  return restRoot + '/' + options.url;
   //return process.env["VUE_APP_BASE_API"] + options.url
   //return options.url
 }
