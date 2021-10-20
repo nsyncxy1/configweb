@@ -8,7 +8,7 @@ module.exports = {
                 //target:'http://8.136.153.61:8083', //测试服务器
                 //target:'http://localhost:8083', //测试服务器
                 //target:'https://nm.dktec.cn/configweb',
-                target:'http://172.16.33.185:8083',
+                target:'http://172.16.30.153:8083',
                 //target:'http://ydyy.nbxczl.cn:444',
                 changeOrigin:true,
                 pathRewrite:{

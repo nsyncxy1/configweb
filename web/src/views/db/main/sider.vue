@@ -238,6 +238,7 @@
         tableNodeClick(data, node){
           //console.log(data);
           //console.log(node.level);
+          // eslint-disable-next-line no-unused-vars
           let level = node.level;
           let query;
           let tableInfo;

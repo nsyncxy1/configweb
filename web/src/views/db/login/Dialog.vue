@@ -84,6 +84,7 @@ export default {
   name: 'login-dialog',
   data () {
     return {
+      dataType:null,
       visible: false,
       formData: {
         host: undefined,
@@ -150,9 +151,11 @@ export default {
       return this.$attrs.dbData.type
     },
     connect () {
-      // console.log('-------- start connect...');
+      console.log('-------- start connect...');
       let that = this
       let type = this.currentDbType()
+      this.dataType = type
+      // eslint-disable-next-line no-unreachable
       this.$refs.myForm.validate((valid) => {
         if (valid) { // 验证成功
           let param = that.filterFormData()
@@ -232,11 +235,20 @@ export default {
         data.name = this.formData.name ? this.formData.name.trim() : this.formData.name
         data.userName = this.formData.userName ? this.formData.userName.trim() : this.formData.userName
       console.log(data);
-      localStorage.setItem("port",data.port)
+      const dataLocal = {}
+      dataLocal[this.dataType] = {
+        port:data.port,
+        name:data.name,
+        host:data.host,
+        userName:data.userName,
+        password:data.password
+      }
+      localStorage.setItem(this.dataType,JSON.stringify(dataLocal[this.dataType]))
+      /*localStorage.setItem("port",data.port)
       localStorage.setItem("name",data.name)
       localStorage.setItem("host",data.host)
       localStorage.setItem("userName",data.userName)
-      localStorage.setItem("password",data.password)
+      localStorage.setItem("password",data.password)*/
       return data
     },
     close () {
@@ -245,13 +257,21 @@ export default {
     },
     open (data) {
       this.visible = true
+      this.dataType = this.currentDbType()
+      console.log('dataType:'+this.dataType)
+      const dataLocal = {}
+      dataLocal[this.dataType] = JSON.parse(localStorage.getItem(this.dataType))
+      let port = dataLocal[this.dataType]['port'] || null
+      let name = dataLocal[this.dataType]['name'] || null
+      let host = dataLocal[this.dataType]['host'] || null
+      let userName = dataLocal[this.dataType]['userName'] || null
+      let password = dataLocal[this.dataType]['password'] || null
       // 初始化表单数据
-
-      let port = localStorage.getItem("port");
+      /*let port = localStorage.getItem("port");
       let name = localStorage.getItem("name");
       let host = localStorage.getItem("host");
       let userName = localStorage.getItem("userName")
-      let password = localStorage.getItem("password")
+      let password = localStorage.getItem("password")*/
       console.log(name);
       console.log(port);
       if (port){

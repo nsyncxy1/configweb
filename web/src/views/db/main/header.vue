@@ -210,6 +210,7 @@
           return TextareaUtil.getSelection(this.$refs.textarea.$el.children[0]);
         },
         getParam(){
+          console.log('getParams:')
           let data = {};
           let sql = this.sql;
           let selectSql = this.getSqlSelection();
@@ -219,6 +220,7 @@
           sql = randomCoding() + Base64.encode(sql)
           sql = Base64.encode(sql)
           data.sql = sql;
+          console.log(data)
           return data;
         },
         modifyTextareaHeight(_height){
