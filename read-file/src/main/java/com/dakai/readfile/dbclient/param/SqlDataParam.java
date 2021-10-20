@@ -23,12 +23,12 @@ public class SqlDataParam implements IDbToken {
 	private String dbId;
 
 	public String getSql() {
-
+//		System.out.println("加密的--sql-->"+sql);
 		if (sql != null) {
 			String se1 = Base64.decodeStr(sql);
 			String se2 = se1.substring(1);
 			String sqlString = Base64.decodeStr(se2);
-			System.out.println(sqlString);
+//			System.out.println("entity--sql-->"+sqlString);
 			return sqlString;
 		}
 

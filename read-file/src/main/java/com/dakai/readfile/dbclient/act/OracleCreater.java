@@ -8,13 +8,14 @@ import com.dakai.readfile.dbclient.iter.IDbPool;
 import com.dakai.readfile.dbclient.iter.IMyDataSources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * oracle 数据库连接创造器
  * @author jayu
  *
  */
-//@Component("oracleCreater")
+@Component("oracleCreater")
 public class OracleCreater implements IDbCreate {
 
 	private static final Logger LOG = LoggerFactory.getLogger(OracleCreater.class);

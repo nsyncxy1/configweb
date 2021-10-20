@@ -1,5 +1,7 @@
 package com.dakai.readfile.dbclient.controller;
 
+import cn.hutool.core.codec.Base64;
+import cn.hutool.core.util.RandomUtil;
 import com.dakai.readfile.dbclient.entity.Result;
 import com.dakai.readfile.dbclient.param.SqlDataParam;
 import com.dakai.readfile.dbclient.utils.ResultUtils;
@@ -39,7 +41,7 @@ public class RedisSpecialSqlController {
 
 		String sql = param.getSql();
 		if("getRedisAllKeys".equals(sql)) {
-			param.setSql("keys *");
+			param.setSql(encrypt("keys *"));
 			Map<String, Object> map = executer.execute(param);
 			Map<String, Object> res = (Map<String, Object>) map.get("result");
 			if(null != res.get("headers")) {
@@ -48,7 +50,7 @@ public class RedisSpecialSqlController {
 				if(headers.size() > 0) {
 					for(Map<String, Object> item:rows) {
 						String key = (String) item.get(headers.get(0));
-						param.setSql("type " + key);
+						param.setSql(encrypt("type " + key));
 						Map<String, Object> keymap = executer.execute(param);
 						Map<String, Object> keyres = (Map<String, Object>) keymap.get("result");
 						LOG.debug(keyres.toString());
@@ -71,5 +73,13 @@ public class RedisSpecialSqlController {
 		LOG.debug("执行结束");
 		return result.getResult();
 	}
+
+	private String encrypt(String sql) {
+		String encode = Base64.encode(sql);
+		char c = RandomUtil.randomChar();
+		return Base64.encode(c + encode);
+	}
+
+
 
 }
