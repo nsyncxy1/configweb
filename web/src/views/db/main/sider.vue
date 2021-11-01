@@ -236,18 +236,25 @@
           }
         },
         tableNodeClick(data, node){
-          //console.log(data);
+          console.log('tableNodeClick:')
+          console.log(data)
+          console.log(node)
           //console.log(node.level);
           // eslint-disable-next-line no-unused-vars
           let level = node.level;
           let query;
           let tableInfo;
+          console.log('currentDB:'+this.currentDb+';type'+ data.type)
           if(entity.tableQuery[this.currentDb]){
             query = entity.tableQuery[this.currentDb][data.type];
             tableInfo = entity.tableQuery[this.currentDb]['tableInfo'];
           }
           let that = this;
+          console.log(typeof query)
+          console.log(query)
+          console.log(tableInfo)
           if(typeof query === 'function'){
+            console.log('sql start!')
             this.$emit('start-get-data', true);
             AjaxUtil.get('sql/execute', {sql: handleSqlBase64(query(data.tableName))}).then((data) => {
               //console.log(data);
@@ -318,6 +325,10 @@
           }
         },
         expendTableNode(data, node, component){
+          console.log('expendTableNode:')
+          console.log(data)
+          console.log(node)
+          console.log(component)
           if(node.level === 1){
             let group = $(component.$el).find('.el-tree-node__children');
             //console.log(group);

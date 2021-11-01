@@ -261,11 +261,12 @@ export default {
       console.log('dataType:'+this.dataType)
       const dataLocal = {}
       dataLocal[this.dataType] = JSON.parse(localStorage.getItem(this.dataType))
-      let port = dataLocal[this.dataType]['port'] || null
-      let name = dataLocal[this.dataType]['name'] || null
-      let host = dataLocal[this.dataType]['host'] || null
-      let userName = dataLocal[this.dataType]['userName'] || null
-      let password = dataLocal[this.dataType]['password'] || null
+      const dataType = dataLocal[this.dataType]
+      let port = dataType.port ? dataType.port : null
+      let name = dataType.name ? dataType.name : null
+      let host = dataType.host ? dataType.host : null
+      let userName = dataType.userName ? dataType.userName : null
+      let password = dataType.password ? dataType.password : null
       // 初始化表单数据
       /*let port = localStorage.getItem("port");
       let name = localStorage.getItem("name");
@@ -281,8 +282,8 @@ export default {
         this.formData.userName = userName
         this.formData.password = password
       }else{
-        this.formData.port = data.port
-        this.formData.name = data.name
+        this.formData.port = data.port || null
+        this.formData.name = data.name || null
         this.formData.host = undefined
         this.formData.userName = undefined
         this.formData.password = undefined
